@@ -76,24 +76,9 @@ public class SwerveModule {
             .positionConversionFactor(SwerveModuleConstants.kDrivingEncoderPositionFactor)
             .velocityConversionFactor(SwerveModuleConstants.kDrivingEncoderVelocityFactor);
 
-        m_turningConfig.encoder.positionConversionFactor(SwerveModuleConstants.kTurningEncoderPositionFactor);
-        m_turningConfig.encoder.velocityConversionFactor(SwerveModuleConstants.kTurningEncoderVelocityFactor);
+        m_turningConfig.absoluteEncoder.positionConversionFactor(SwerveModuleConstants.kTurningEncoderPositionFactor);
+        m_turningConfig.absoluteEncoder.velocityConversionFactor(SwerveModuleConstants.kTurningEncoderVelocityFactor);
 
-        /*
-         * This is necessary because the gearing in the swerve module means the motor
-         * spins the opposite direction it turn the wheel in
-         */
-        m_turningConfig.encoder.inverted(SwerveModuleConstants.kTurningEncoderInverted);
-
-
-        // Enable PID wrap around for the turning motor. This will allow the PID
-        // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
-        // to 10 degrees will go through 0 rather than the other direction which is a
-        // longer route.
-        m_turningConfig.closedLoop
-            .positionWrappingEnabled(true)
-            .positionWrappingMinInput(SwerveModuleConstants.kTurningEncoderPositionPIDMinInput)
-            .positionWrappingMaxInput(SwerveModuleConstants.kTurningEncoderPositionPIDMaxInput);
 
         // Setting the PID constants
         m_drivingConfig.closedLoop
@@ -107,6 +92,23 @@ public class SwerveModule {
             .pidf(SwerveModuleConstants.kTurningP, SwerveModuleConstants.kTurningI, SwerveModuleConstants.kTurningD, SwerveModuleConstants.kTurningFF)
             .outputRange(SwerveModuleConstants.kTurningMinOutput, SwerveModuleConstants.kTurningMaxOutput);
 
+        /*
+         * This is necessary because the gearing in the swerve module means the motor
+         * spins the opposite direction it turn the wheel in
+         */
+        m_turningConfig.absoluteEncoder.inverted(SwerveModuleConstants.kTurningEncoderInverted);
+
+
+        // Enable PID wrap around for the turning motor. This will allow the PID
+        // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+        // to 10 degrees will go through 0 rather than the other direction which is a
+        // longer route.
+        m_turningConfig.closedLoop
+            .positionWrappingEnabled(true)
+            .positionWrappingMinInput(SwerveModuleConstants.kTurningEncoderPositionPIDMinInput)
+            .positionWrappingMaxInput(SwerveModuleConstants.kTurningEncoderPositionPIDMaxInput);
+
+        
         
 
         m_drivingConfig
