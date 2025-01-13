@@ -168,17 +168,19 @@ public class SwerveModule {
         correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(m_chassisAngularOffset));
 
         // Optimize the reference state to avoid spinning further than 90 degrees.
-        SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
-            new Rotation2d(m_turningEncoder.getPosition()));
+        correctedDesiredState.optimize(new Rotation2d(m_turningEncoder.getPosition()));
+        
 
         /*
          * Manually converting units, shouldn't be necessary
          */
-        double speedRPMs = (optimizedDesiredState.speedMetersPerSecond / 
+        double speedRPMs = (correctedDesiredState.speedMetersPerSecond / 
             SwerveModuleConstants.kWheelCircumferenceMeters) * 60;
-        double optimizedangle = optimizedDesiredState.angle.getRadians();
+        double optimizedangle = correctedDesiredState.angle.getRadians();
 
         SmartDashboard.putNumber("optimized angle", optimizedangle);
+        SmartDashboard.putNumber("drivespeed", speedRPMs);
+        SmartDashboard.putNumber("angle from encoder", m_turningEncoder.getPosition());
         /*
          * Command driving and turning SPARKS MAX towards their respective setpoints.
          * This actually tells the motors to move
