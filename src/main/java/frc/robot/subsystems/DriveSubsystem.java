@@ -2,12 +2,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -70,6 +69,10 @@ public class DriveSubsystem extends SubsystemBase {
     private SwerveDrivePoseEstimator m_PoseEstimator;
 
     private RobotConfig pathConfig;
+
+    private boolean isRestricted;
+    private boolean dPadPressed;
+    private boolean dPadReleased;
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
@@ -212,6 +215,23 @@ public class DriveSubsystem extends SubsystemBase {
         }
     }
 
+    public void restrictDriving(boolean dPadPressed)
+    {
+        SmartDashboard.putBoolean("restrictDriving", isRestricted);
+
+        if(dPadPressed && dPadReleased)
+        {
+            isRestricted = !isRestricted;
+            dPadReleased = false;
+        }
+        if (!dPadPressed) 
+        {
+            dPadReleased = true;
+        }
+    }
+
+
+
     /**
      * Drive method used by path planner, accepts a robot relative ChassisSpeeds object
      * @param speeds
@@ -237,19 +257,24 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void drive(double xSpeed, double ySpeed, double rot) {
         //Dead Zones
-        if (Math.abs(xSpeed) < 0.1) 
+        if (Math.abs(xSpeed) < 0.05) 
         {
             xSpeed = 0;
         }
 
-        if (Math.abs(ySpeed) < 0.1) 
+        if (Math.abs(ySpeed) < 0.05) 
         {
             ySpeed = 0;
         }
 
-        if (Math.abs(rot) < 0.1) 
+        if (Math.abs(rot) < 0.05) 
         {
             rot = 0;
+        }
+
+        if (isRestricted)
+        {
+            ySpeed = 0;
         }
 
         // Adjust input based on max speed
