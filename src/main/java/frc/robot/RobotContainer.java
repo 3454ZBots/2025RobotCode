@@ -3,12 +3,15 @@ package frc.robot;
 
 import frc.robot.constants.AutoConstants.AutoDriveConstants;
 import frc.robot.constants.BasicConstants.ControllerConstants;
+import frc.robot.constants.MechanismConstants;
 import frc.robot.constants.SwerveConstants.SwerveDriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.VisionSubsystem;
 import pabeles.concurrency.ConcurrencyOps.NewInstance;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,8 +44,9 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
-    
-   
+    //private final Mechanisms m_mechanisms = new Mechanisms();
+    //DigitalInput opticalSensor = new DigitalInput(MechanismConstants.SENSOR_DIO_PORT);
+    //Trigger opticalTrigger = new Trigger(opticalSensor::get);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -74,7 +79,12 @@ public class RobotContainer {
         m_driverController.rightBumper().onTrue(Commands.runOnce(() -> m_robotDrive.toggleFieldOriented(true)));
         m_driverController.rightBumper().onFalse(Commands.runOnce(() -> m_robotDrive.toggleFieldOriented(false)));
         m_driverController.povUp().onTrue(Commands.runOnce(() -> m_robotDrive.restrictDriving(true)));
-        m_driverController.povUp().onTrue(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
+        m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
+
+
+
+        //when senor changes from not trigger to trigger
+        //opticalTrigger.onTrue(Commands.runOnce(() -> m_mechanisms.stopintake()));
     }
 
     /**

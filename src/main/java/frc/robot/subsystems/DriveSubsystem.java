@@ -71,8 +71,9 @@ public class DriveSubsystem extends SubsystemBase {
     private RobotConfig pathConfig;
 
     private boolean isRestricted;
-    private boolean dPadPressed;
     private boolean dPadReleased;
+
+    private SwerveModulePosition[] m_swerveModulePositions;
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
@@ -125,15 +126,11 @@ public class DriveSubsystem extends SubsystemBase {
          * All of this updates the the robot pose (i.e. where the robot thinks it is relative to the field)
          * and publishes that pose to advantageScope
          */
-        m_odometry.update(
-        getHeading(),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        });
-        m_PoseEstimator.update(getHeading(), getModulePositions());
+        m_swerveModulePositions = getModulePositions();
+        m_odometry.update(getHeading(), m_swerveModulePositions);
+        SmartDashboard.putNumber("odometery X", m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("odometery y", m_odometry.getPoseMeters().getY());
+        m_PoseEstimator.update(getHeading(), m_swerveModulePositions);
         m_field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
 
 

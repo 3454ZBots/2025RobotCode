@@ -85,10 +85,10 @@ public final class SwerveConstants
 
         // Distance between front and back wheels on robot (I'm assuming this goes with that ln 76)
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2), //Front Left
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //Front Right
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //Back Left
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //Back Right
 
 
         //The angular offsets make no sense but zeroeing absolute encoders will be necessary to fix this I think    
