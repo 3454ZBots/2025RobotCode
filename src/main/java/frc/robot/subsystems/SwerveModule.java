@@ -98,6 +98,7 @@ public class SwerveModule {
          */
         m_turningConfig.absoluteEncoder.inverted(SwerveModuleConstants.kTurningEncoderInverted);
 
+        
 
         // Enable PID wrap around for the turning motor. This will allow the PID
         // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
@@ -138,7 +139,7 @@ public class SwerveModule {
     public SwerveModuleState getState() {
         // Apply chassis angular offset to the encoder position to get the position
         // relative to the chassis.
-        return new SwerveModuleState(m_drivingEncoder.getVelocity(),
+        return new SwerveModuleState(m_drivingEncoder.getVelocity()*-1,
             new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
     }
 
@@ -151,7 +152,7 @@ public class SwerveModule {
         // Apply chassis angular offset to the encoder position to get the position
         // relative to the chassis.
         return new SwerveModulePosition(
-            m_drivingEncoder.getPosition(),
+            m_drivingEncoder.getPosition()*-1,
             new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
     }
 
