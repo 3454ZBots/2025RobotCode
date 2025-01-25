@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 import frc.robot.constants.SwerveConstants.SwerveDriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -87,7 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putData("Rotation 2D Pose", fakefield);
 
 
-        
+    
         try {
             pathConfig = RobotConfig.fromGUISettings();
         } catch (Exception e) {
@@ -131,8 +132,22 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("odometery X", m_odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("odometery y", m_odometry.getPoseMeters().getY());
         m_PoseEstimator.update(getHeading(), m_swerveModulePositions);
-        m_field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
+        
+        
+        
+        LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+    
+            m_PoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            m_PoseEstimator.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
+        }
 
+
+      m_field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
 
         //Publishing the state of each swerve module to advantage scope
         SwerveModuleState[] states = new SwerveModuleState[]
@@ -197,21 +212,16 @@ public class DriveSubsystem extends SubsystemBase {
             pose);
     }
 
-    public void toggleFieldOriented(boolean pressed)
+    public void toggleFieldOriented()
     {
-        SmartDashboard.putBoolean("Field-Oriented", isFieldOriented);
+        
         //Should be a better way to do this
-        if(pressed && released)
-        {
-            isFieldOriented = !isFieldOriented;
-            released = false;
-        }
-        if(!pressed)
-        {
-            released = true;
-        }
+        isFieldOriented = !isFieldOriented;
+        
+        //System.out.println("ToggleFieldOriented "+isFieldOriented);
+        SmartDashboard.putBoolean("Field-Oriented", isFieldOriented);
+        
     }
-
     public void restrictDriving(boolean dPadPressed)
     {
         SmartDashboard.putBoolean("restrictDriving", isRestricted);
@@ -221,7 +231,7 @@ public class DriveSubsystem extends SubsystemBase {
             isRestricted = !isRestricted;
             dPadReleased = false;
         }
-        if (!dPadPressed) 
+        if(!dPadPressed) 
         {
             dPadReleased = true;
         }

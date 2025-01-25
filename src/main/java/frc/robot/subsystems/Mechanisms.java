@@ -26,7 +26,8 @@ public class Mechanisms extends SubsystemBase{
             elevatorPIDright = elevatorRight.getClosedLoopController();
             elevatorPIDleft = elevatorLeft.getClosedLoopController();
 
-           
+           //Three motors (Coral Intake) (2 elevator motors, L and R),
+           //all neos, one optical sensor (Stops intake of coral), two encoders
 
             
     }

@@ -76,8 +76,7 @@ public class RobotContainer {
     private void configureBindings() {
 
         //Driver Commands
-        m_driverController.rightBumper().onTrue(Commands.runOnce(() -> m_robotDrive.toggleFieldOriented(true)));
-        m_driverController.rightBumper().onFalse(Commands.runOnce(() -> m_robotDrive.toggleFieldOriented(false)));
+        m_driverController.rightBumper().onTrue(Commands.runOnce(() -> m_robotDrive.toggleFieldOriented()));
         m_driverController.povUp().onTrue(Commands.runOnce(() -> m_robotDrive.restrictDriving(true)));
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
 
