@@ -7,6 +7,7 @@ import frc.robot.constants.MechanismConstants;
 import frc.robot.constants.SwerveConstants.SwerveDriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Mechanisms;
+import frc.robot.subsystems.PathSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import pabeles.concurrency.ConcurrencyOps.NewInstance;
 import edu.wpi.first.math.controller.PIDController;
@@ -42,6 +43,7 @@ public class RobotContainer {
 
     //Subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+    private final PathSubsystem m_RobotPath = new PathSubsystem(m_robotDrive);
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
     //private final Mechanisms m_mechanisms = new Mechanisms();
@@ -92,6 +94,8 @@ public class RobotContainer {
      */
     private void configureAutoCommands() {
         //Remember Commands.waitSeconds() is a thing
+
+        
     }
 
     private void configureSmartDashboard() {
