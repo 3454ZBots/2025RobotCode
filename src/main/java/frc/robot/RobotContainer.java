@@ -10,6 +10,9 @@ import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.PathSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import pabeles.concurrency.ConcurrencyOps.NewInstance;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -101,6 +104,9 @@ public class RobotContainer {
     private void configureSmartDashboard() {
         SmartDashboard.putData("Auto choices", m_chooser);
         SmartDashboard.putData("Angle choices", Anglechooser);
+
+        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
+
     }
 
 
@@ -110,7 +116,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
     public Command getAutonomousCommand() {
-        return new SequentialCommandGroup(Anglechooser.getSelected(), Commands.waitSeconds(0.5), m_chooser.getSelected());
+        return new SequentialCommandGroup(Commands.waitSeconds(0.5), m_chooser.getSelected());
     }
 
     public void printOutput(){
