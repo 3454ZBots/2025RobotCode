@@ -175,8 +175,7 @@ public class SwerveModule {
         /*
          * Manually converting units, shouldn't be necessary
          */
-        double speedRPMs = (correctedDesiredState.speedMetersPerSecond / 
-            SwerveModuleConstants.kWheelCircumferenceMeters) * 60;
+        double speedRPMs = correctedDesiredState.speedMetersPerSecond;
         double optimizedangle = correctedDesiredState.angle.getRadians();
 
         SmartDashboard.putNumber("optimized angle", optimizedangle);
@@ -190,8 +189,8 @@ public class SwerveModule {
         m_turningPIDController.setReference(optimizedangle, SparkMax.ControlType.kPosition);
 
         //These should be usefull for PID tuning
-        //SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkMax.getDeviceId(), m_drivingEncoder.getVelocity());
-        //SmartDashboard.putNumber("desired speed (RPMs) for Spark " + m_drivingSparkMax.getDeviceId(), optimizedDesiredState.speedMetersPerSecond);
+        SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkMax.getDeviceId(), m_drivingEncoder.getVelocity());
+        SmartDashboard.putNumber("desired speed (RPMs) for Spark " + m_drivingSparkMax.getDeviceId(), correctedDesiredState.speedMetersPerSecond);
 
 
         //Updates the modules internal state

@@ -46,7 +46,7 @@ public class RobotContainer {
 
     //Subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    private final PathSubsystem m_RobotPath = new PathSubsystem(m_robotDrive);
+    private final PathSubsystem m_robotPath = new PathSubsystem(m_robotDrive);
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
     //private final Mechanisms m_mechanisms = new Mechanisms();

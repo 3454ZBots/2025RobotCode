@@ -82,7 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
         resetEncoders();
         m_odometry = new SwerveDriveOdometry(SwerveDriveConstants.kDriveKinematics, getHeading(), getModulePositions());
 
-        m_PoseEstimator = new SwerveDrivePoseEstimator(SwerveDriveConstants.kDriveKinematics, getHeading(), getModulePositions(), getPose(), poseDeviations, visionDeviations);
+        m_PoseEstimator = new SwerveDrivePoseEstimator(SwerveDriveConstants.kDriveKinematics, getHeading(), getModulePositions(), m_odometry.getPoseMeters(), poseDeviations, visionDeviations);
         
         SmartDashboard.putData("field pose", m_field);
         SmartDashboard.putData("Rotation 2D Pose", fakefield);
@@ -137,7 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
         
         LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2 != null && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         {
     
             m_PoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
@@ -147,7 +147,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
 
-      m_field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
+        m_field.setRobotPose(getPose());
 
         //Publishing the state of each swerve module to advantage scope
         SwerveModuleState[] states = new SwerveModuleState[]
@@ -289,6 +289,8 @@ public class DriveSubsystem extends SubsystemBase {
         ySpeed *= SwerveDriveConstants.kMaxSpeedMetersPerSecond;
         rot *= SwerveDriveConstants.kMaxAngularSpeed;
 
+        xSpeed = 60;
+
         SmartDashboard.putNumber("Rot", rot);
         SmartDashboard.putNumber("IMU Heading:", getHeading().getDegrees());
         SmartDashboard.putNumber("IMU Turn Rate", getTurnRate());
@@ -306,7 +308,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
         
         //Ensures no wheels are tryinh to move above max speed
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveDriveConstants.kMaxSpeedMetersPerSecond);
+        //SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveDriveConstants.kMaxSpeedMetersPerSecond);
 
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
         m_frontRight.setDesiredState(swerveModuleStates[1]);
