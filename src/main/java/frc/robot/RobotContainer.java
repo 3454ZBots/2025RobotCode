@@ -86,6 +86,7 @@ public class RobotContainer {
         m_driverController.rightBumper().onTrue(Commands.runOnce(() -> m_robotDrive.toggleFieldOriented()));
         m_driverController.povUp().onTrue(Commands.runOnce(() -> m_robotDrive.restrictDriving(true)));
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
+        m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath()));
 
 
 

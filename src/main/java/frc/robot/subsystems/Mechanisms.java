@@ -17,6 +17,9 @@ public class Mechanisms extends SubsystemBase{
     private SparkClosedLoopController elevatorPIDleft;
     private DigitalInput opticalSensor;
 
+    private SparkMax algaeRoller;
+    private SparkMax algaeWrist;
+
     public Mechanisms(){
 
             elevatorRight = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
@@ -28,6 +31,12 @@ public class Mechanisms extends SubsystemBase{
 
            //Three motors (Coral Intake) (2 elevator motors, L and R),
            //all neos, one optical sensor (Stops intake of coral), two encoders
+
+           //Algae: 1 motor for roller, 1 motor for "wrist"
+           //SparkMAX's ?? Or old Spark's 
+           //Any optical/ultrasonic sensors for the algae?
+           algaeRoller = new SparkMax(-9999, MotorType.kBrushless);
+           algaeWrist = new SparkMax(-9999, MotorType.kBrushless);
 
             
     }
