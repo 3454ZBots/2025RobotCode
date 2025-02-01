@@ -102,8 +102,8 @@ public class DriveSubsystem extends SubsystemBase {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> pathPlannerDrive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(3.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(0.0, 0.0, 0.0)  // Rotation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants Used to be: 3, 0, 0
+                    new PIDConstants(5.0, 0.0, 0.0)  // Rotation PID constants Used to be: 0, 0, 0
             ),
             pathConfig,
             this::isOnBlue,

@@ -63,7 +63,9 @@ public class RobotContainer {
 
         //Setting the default commands for subsystems. These run repeatedly but only when the subsystem is NOT RUNNING A DIFFERENT COMMAND
         m_robotDrive.setDefaultCommand(
-            new RunCommand(() -> m_robotDrive.manualDrive(m_driverController.getLeftY(), m_driverController.getLeftX(), m_driverController.getRightX()), m_robotDrive));
+            // Forward joystick values are negative, must be inverted
+            // https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html
+            new RunCommand(() -> m_robotDrive.manualDrive(-m_driverController.getLeftY(), -m_driverController.getLeftX(), -m_driverController.getRightX()), m_robotDrive));
         // m_robotVision.setDefaultCommand(
         //     new RunCommand(() -> m_robotVision.visionPeriodic(), m_robotVision));
         
