@@ -43,10 +43,10 @@ public final class SwerveConstants
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
         public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-        public static final double kDrivingP = 0.00089;  //0.03;
+        public static final double kDrivingP = 0.001;
         public static final double kDrivingI = 0;    //0.001;
         public static final double kDrivingD = 0;      //3;
-        public static final double kDrivingFF = (0.00003 / kDriveWheelFreeSpeedRps);
+        public static final double kDrivingFF = (1 / kDriveWheelFreeSpeedRps);
         public static final double kDrivingMinOutput = -1;
         public static final double kDrivingMaxOutput = 1;
 
@@ -73,7 +73,7 @@ public final class SwerveConstants
         public static final double kMaxAngularSpeed = 1.5 * Math.PI;
 
         //We should look into this
-        //Slew code, makes robot move more smoothly
+        //Slew code, makes robot move more smoothly%
         //public static final double kDirectionSlewRate = 1.2; // radians per second
         //public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
         //public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)

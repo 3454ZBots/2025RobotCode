@@ -63,7 +63,7 @@ public class RobotContainer {
 
         //Setting the default commands for subsystems. These run repeatedly but only when the subsystem is NOT RUNNING A DIFFERENT COMMAND
         m_robotDrive.setDefaultCommand(
-            new RunCommand(() -> m_robotDrive.drive(m_driverController.getLeftY(), m_driverController.getLeftX(), m_driverController.getRightX()), m_robotDrive));
+            new RunCommand(() -> m_robotDrive.manualDrive(m_driverController.getLeftY(), m_driverController.getLeftX(), m_driverController.getRightX()), m_robotDrive));
         // m_robotVision.setDefaultCommand(
         //     new RunCommand(() -> m_robotVision.visionPeriodic(), m_robotVision));
         
@@ -106,6 +106,7 @@ public class RobotContainer {
         SmartDashboard.putData("Angle choices", Anglechooser);
 
         m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
+        m_chooser.setDefaultOption("Test", new PathPlannerAuto("Test Auto"));
 
     }
 

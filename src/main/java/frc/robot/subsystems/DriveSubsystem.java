@@ -245,9 +245,7 @@ public class DriveSubsystem extends SubsystemBase {
      */
     private void pathPlannerDrive(ChassisSpeeds speeds) {
         speeds = ChassisSpeeds.discretize(speeds, 1);
-        SwerveModuleState[] swerveModuleStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveDriveConstants.kMaxSpeedMetersPerSecond);
-        setModuleStates(swerveModuleStates);
+        drive(speeds);
     }
 
 
@@ -262,7 +260,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @param fieldRelative Whether the provided x and y speeds are relative to the
      *                      field.
      */
-    public void drive(double xSpeed, double ySpeed, double rot) {
+    public void manualDrive(double xSpeed, double ySpeed, double rot) {
         //Dead Zones
         if (Math.abs(xSpeed) < 0.05) 
         {
@@ -289,7 +287,7 @@ public class DriveSubsystem extends SubsystemBase {
         ySpeed *= SwerveDriveConstants.kMaxSpeedMetersPerSecond;
         rot *= SwerveDriveConstants.kMaxAngularSpeed;
 
-        xSpeed = 60;
+        
 
         SmartDashboard.putNumber("Rot", rot);
         SmartDashboard.putNumber("IMU Heading:", getHeading().getDegrees());
@@ -299,21 +297,28 @@ public class DriveSubsystem extends SubsystemBase {
          * The speeds passed into this method represent the intended movement of the entire robot, either from its perspective or
          * relative to the field. This determines what each swerve module needs to do to achieve that
          */
-        SwerveModuleState[] swerveModuleStates;
         if(isFieldOriented) {
-            swerveModuleStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading()));
+            drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading()));
         }
         else {
-            swerveModuleStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, rot));
+            drive(new ChassisSpeeds(xSpeed, ySpeed, rot));
         }
         
-        //Ensures no wheels are tryinh to move above max speed
-        //SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveDriveConstants.kMaxSpeedMetersPerSecond);
+    }
+
+    public void drive(ChassisSpeeds speeds){
+        SwerveModuleState[] swerveModuleStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+
+        //Ensures no wheels are trying to move above max speed
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveDriveConstants.kMaxSpeedMetersPerSecond);
 
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_rearLeft.setDesiredState(swerveModuleStates[2]);
         m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+
+
     }
 
 
