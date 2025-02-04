@@ -32,6 +32,7 @@ public class PathSubsystem extends SubsystemBase{
     public void followpath(){
 
         Pose2d startPose2d = driveSubsystem.getVisionPose();
+        driveSubsystem.m_odometry.resetPose(startPose2d); //?
         Pose2d endPose2d = AutoConstants.AutoDriveConstants.m_centered;
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose2d, endPose2d);
@@ -41,7 +42,9 @@ public class PathSubsystem extends SubsystemBase{
         PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, new Rotation2d()));
 
         path.preventFlipping = true;
-
+        
+        //driveSubsystem.fakefield.setRobotPose(path.getPathPoses().get(path.getPathPoses().size()-1));
+        
         AutoBuilder.followPath(path).schedule();
 
     }

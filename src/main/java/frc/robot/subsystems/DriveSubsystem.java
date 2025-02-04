@@ -55,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
     
     //These are used for displaying the robot pose
     private Field2d m_field = new Field2d(); 
-    private Field2d fakefield = new Field2d(); 
+    public Field2d fakefield = new Field2d(); 
 
     private boolean isFieldOriented = true;
     private boolean released = true; //is what released?
@@ -67,10 +67,10 @@ public class DriveSubsystem extends SubsystemBase {
     //This allows our swerve module states to be viewable in advantage scope
     private StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
-    private SwerveDriveOdometry m_odometry;
+    public SwerveDriveOdometry m_odometry;
     private SwerveDrivePoseEstimator m_PoseEstimator;
 
-    private RobotConfig pathConfig;
+    public RobotConfig pathConfig;
 
     private boolean isRestricted;
     private boolean dPadReleased;
@@ -98,7 +98,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
         //PathPlanner setup
         AutoBuilder.configure(
-            this::getPose, // Robot pose supplier
+            this::getOdometryPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> pathPlannerDrive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
@@ -172,7 +172,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("RR Speed", m_rearRight.getState().speedMetersPerSecond);
 
         //for troubleshooting
-        fakefield.setRobotPose(new Pose2d(0, 0, getHeading()));
+        //fakefield.setRobotPose(new Pose2d(0, 0, getHeading()));
 
         
     }
@@ -182,7 +182,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void simulationPeriodic ()
     {
         m_PoseEstimator.update(Rotation2d.fromDegrees(m_gyro.getAngle() * -1), getModulePositions());
-        m_field.setRobotPose(getPose());
+        m_field.setRobotPose(getOdometryPose());
     }
 
     /**
@@ -191,7 +191,7 @@ public class DriveSubsystem extends SubsystemBase {
      * NOT USING VISION
      * @return The pose.
      */
-    public Pose2d getPose() {
+    public Pose2d getOdometryPose() {
         return m_odometry.getPoseMeters();
     }
 
