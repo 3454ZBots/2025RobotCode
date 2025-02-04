@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.AutoConstants;
 
 import java.util.List;
 
@@ -30,12 +31,12 @@ public class PathSubsystem extends SubsystemBase{
 
     public void followpath(){
 
-        Pose2d startPose2d = driveSubsystem.getPose();
-        Pose2d endPose2d = new Pose2d(startPose2d.getX() + 1,startPose2d.getY(),new Rotation2d());
+        Pose2d startPose2d = driveSubsystem.getVisionPose();
+        Pose2d endPose2d = AutoConstants.AutoDriveConstants.m_centered;
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose2d, endPose2d);
 
-        PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+        PathConstraints constraints = new PathConstraints(1.0, 1.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
 
         PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, new Rotation2d()));
 

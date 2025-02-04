@@ -8,6 +8,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -147,7 +148,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
 
-        m_field.setRobotPose(getPose());
+        m_field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
 
         //Publishing the state of each swerve module to advantage scope
         SwerveModuleState[] states = new SwerveModuleState[]
@@ -187,10 +188,15 @@ public class DriveSubsystem extends SubsystemBase {
     /**
      * Returns the currently-estimated pose of the robot, i.e. where it thinks it is relative to the field
      *
+     * NOT USING VISION
      * @return The pose.
      */
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
+    }
+
+    public Pose2d getVisionPose() {
+        return m_PoseEstimator.getEstimatedPosition();
     }
 
 

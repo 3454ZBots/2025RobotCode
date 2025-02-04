@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
@@ -25,6 +27,8 @@ public final class AutoConstants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond,
             kMaxAngularSpeedRadiansPerSecondSquared);
+
+        public static final Pose2d m_centered = new Pose2d(2.97, 4.04, new Rotation2d());
     }
 
    
