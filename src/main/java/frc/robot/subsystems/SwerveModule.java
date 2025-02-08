@@ -4,6 +4,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.REVLibError;
@@ -13,6 +14,7 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -21,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.SwerveConstants.SwerveModuleConstants;
 
 public class SwerveModule {
-    private final SparkMax m_drivingSparkMax;
+    private final SparkFlex m_drivingSparkFlex;
     private final SparkMax m_turningSparkMax;
 
     private final RelativeEncoder m_drivingEncoder;
@@ -33,7 +35,7 @@ public class SwerveModule {
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake; //As opposed to coast
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-    private SparkMaxConfig m_drivingConfig;
+    private SparkFlexConfig m_drivingConfig;
     private SparkMaxConfig m_turningConfig;
 
     private double m_chassisAngularOffset = 0;
@@ -44,19 +46,19 @@ public class SwerveModule {
      * Constructs a SwerveModule and reconfigures SparkMaxes accordingly
      */
     public SwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
-        m_drivingSparkMax = new SparkMax(drivingCANId, MotorType.kBrushless);
+        m_drivingSparkFlex = new SparkFlex(drivingCANId, MotorType.kBrushless);
         m_turningSparkMax = new SparkMax(turningCANId, MotorType.kBrushless);
 
         
         
 
 
-        m_drivingEncoder = m_drivingSparkMax.getEncoder();
+        m_drivingEncoder = m_drivingSparkFlex.getEncoder();
         m_turningEncoder = m_turningSparkMax.getAbsoluteEncoder();
-        m_drivingPIDController = m_drivingSparkMax.getClosedLoopController();
+        m_drivingPIDController = m_drivingSparkFlex.getClosedLoopController();
         m_turningPIDController = m_turningSparkMax.getClosedLoopController();
 
-        m_drivingConfig = new SparkMaxConfig();
+        m_drivingConfig = new SparkFlexConfig();
         m_turningConfig = new SparkMaxConfig();
         
 
@@ -121,7 +123,7 @@ public class SwerveModule {
             .smartCurrentLimit(SwerveModuleConstants.kTurningMotorCurrentLimit);
        
 
-        m_drivingSparkMax.configure(m_drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_drivingSparkFlex.configure(m_drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_turningSparkMax.configure(m_turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         
@@ -189,8 +191,8 @@ public class SwerveModule {
         m_turningPIDController.setReference(optimizedangle, SparkMax.ControlType.kPosition);
 
         //These should be usefull for PID tuning
-        SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkMax.getDeviceId(), m_drivingEncoder.getVelocity());
-        SmartDashboard.putNumber("desired speed (RPMs) for Spark " + m_drivingSparkMax.getDeviceId(), correctedDesiredState.speedMetersPerSecond);
+        SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkFlex.getDeviceId(), m_drivingEncoder.getVelocity());
+        SmartDashboard.putNumber("desired speed (RPMs) for Spark " + m_drivingSparkFlex.getDeviceId(), correctedDesiredState.speedMetersPerSecond);
 
 
         //Updates the modules internal state
