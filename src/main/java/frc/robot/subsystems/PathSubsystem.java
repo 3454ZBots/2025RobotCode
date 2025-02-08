@@ -37,7 +37,7 @@ public class PathSubsystem extends SubsystemBase{
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose2d, endPose2d);
 
-        PathConstraints constraints = new PathConstraints(1.0, 1.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+        PathConstraints constraints = new PathConstraints(3.0, 1.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
 
         PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, new Rotation2d()));
 

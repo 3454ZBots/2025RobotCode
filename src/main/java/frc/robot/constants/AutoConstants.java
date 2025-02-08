@@ -28,7 +28,7 @@ public final class AutoConstants {
             new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond,
             kMaxAngularSpeedRadiansPerSecondSquared);
 
-        public static final Pose2d m_centered = new Pose2d(2.97, 4.04, new Rotation2d());
+        public static final Pose2d m_centered = new Pose2d(2.97+0.37, 4.04, new Rotation2d());
     }
 
    
