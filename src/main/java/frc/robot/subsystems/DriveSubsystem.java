@@ -136,16 +136,16 @@ public class DriveSubsystem extends SubsystemBase {
         
         
         
-        LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2 != null && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
+        // LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        // LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        // if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2 != null && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        // {
     
-            m_PoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            m_PoseEstimator.addVisionMeasurement(
-                mt2.pose,
-                mt2.timestampSeconds);
-        }
+        //     m_PoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        //     m_PoseEstimator.addVisionMeasurement(
+        //         mt2.pose,
+        //         mt2.timestampSeconds);
+        // }
 
 
         m_field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
@@ -221,7 +221,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void toggleFieldOriented()
     {
         
-        //Should be a better way to do this
+    
         isFieldOriented = !isFieldOriented;
         
         //System.out.println("ToggleFieldOriented "+isFieldOriented);
@@ -287,6 +287,13 @@ public class DriveSubsystem extends SubsystemBase {
         {
             ySpeed = 0;
         }
+
+        //Quadratic Scaling
+        xSpeed *= Math.abs(xSpeed);
+        ySpeed *= Math.abs(ySpeed);
+        rot *= Math.abs(rot);
+
+
 
         // Adjust input based on max speed
         xSpeed *= SwerveDriveConstants.kMaxSpeedMetersPerSecond;

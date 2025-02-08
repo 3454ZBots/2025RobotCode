@@ -92,21 +92,21 @@ public final class SwerveConstants
 
 
         //The angular offsets make no sense but zeroeing absolute encoders will be necessary to fix this I think    
-        public static final int kFrontLeftDrivingCanId = 6;
-        public static final int kFrontLeftTurningCanId = 7;
-        public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+        public static final int kFrontLeftDrivingCanId = 8;
+        public static final int kFrontLeftTurningCanId = 9;
+        public static final double kFrontLeftChassisAngularOffset = -Math.PI/2;
         
-        public static final int kFrontRightDrivingCanId = 4;
-        public static final int kFrontRightTurningCanId = 5;
+        public static final int kFrontRightDrivingCanId = 2;
+        public static final int kFrontRightTurningCanId = 3;
         public static final double kFrontRightChassisAngularOffset = 0;
     
-        public static final int kRearLeftDrivingCanId = 8;
-        public static final int kRearLeftTurningCanId = 9;
+        public static final int kRearLeftDrivingCanId = 6;
+        public static final int kRearLeftTurningCanId = 7;
         public static final double kBackLeftChassisAngularOffset = Math.PI;
     
-        public static final int kRearRightDrivingCanId = 2;
-        public static final int kRearRightTurningCanId = 3;
-        public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+        public static final int kRearRightDrivingCanId = 4;
+        public static final int kRearRightTurningCanId = 5;
+        public static final double kBackRightChassisAngularOffset = Math.PI/2;
     
         public static final boolean kGyroReversed = false;
         public static final int PIGEON_ID = 10;
