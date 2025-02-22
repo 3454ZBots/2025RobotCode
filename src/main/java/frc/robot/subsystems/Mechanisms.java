@@ -5,6 +5,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.MechanismConstants;
 
@@ -19,6 +21,8 @@ public class Mechanisms extends SubsystemBase{
 
     private SparkMax algaeRoller;
     private SparkMax algaeWrist;
+
+    boolean algaeActivated = false;
 
     public Mechanisms(){
 
@@ -72,12 +76,40 @@ public class Mechanisms extends SubsystemBase{
     public void intakeCoral(){
         coral.set(0.5);
         //Turn on intake for coral, needs to be turned off seperately
-
-        
     }
 
     public void stopintake(){
         coral.set(0);
+    }
+
+    public void activateAlgae(){
+        
+        if (algaeActivated == false) {
+            algaeRoller.set(0.5);
+            
+            algaeActivated = true;
+
+        } else if(algaeActivated) {
+
+            algaeRoller.set(-0.5);
+        
+    
+            algaeActivated = false;
+            new SequentialCommandGroup(Commands.waitSeconds(1), Commands.runOnce(()-> stopAlgae())).schedule();
+        }
 
     }
+
+    public void stopAlgae(){
+            algaeRoller.set(0);
+
+    } 
+
+    public void wrist(double wristvalue){
+
+        algaeWrist.set(wristvalue * -0.25);
+
+    }
+
+
 }

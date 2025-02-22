@@ -224,7 +224,7 @@ public class DriveSubsystem extends SubsystemBase {
     
         isFieldOriented = !isFieldOriented;
         
-        //System.out.println("ToggleFieldOriented "+isFieldOriented);
+        System.out.println("ToggleFieldOriented "+isFieldOriented);
         SmartDashboard.putBoolean("Field-Oriented", isFieldOriented);
         
     }

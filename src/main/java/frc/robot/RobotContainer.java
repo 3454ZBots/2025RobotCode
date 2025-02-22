@@ -9,12 +9,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.PathSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import pabeles.concurrency.ConcurrencyOps.NewInstance;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -42,14 +39,14 @@ public class RobotContainer {
 
     //Controllers
     CommandXboxController m_driverController = new CommandXboxController(ControllerConstants.DRIVE_REMOTE_PORT);
-    //CommandXboxController m_mechanismController = new CommandXboxController(ControllerConstants.MECHANISM_REMOTE_PORT);
+    CommandXboxController m_mechanismController = new CommandXboxController(ControllerConstants.MECHANISM_REMOTE_PORT);
 
     //Subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final PathSubsystem m_robotPath = new PathSubsystem(m_robotDrive);
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
-    //private final Mechanisms m_mechanisms = new Mechanisms();
+    private final Mechanisms m_robotMechanisms = new Mechanisms();
     //DigitalInput opticalSensor = new DigitalInput(MechanismConstants.SENSOR_DIO_PORT);
     //Trigger opticalTrigger = new Trigger(opticalSensor::get);
 
@@ -66,9 +63,13 @@ public class RobotContainer {
             // Forward joystick values are negative, must be inverted
             // https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html
             new RunCommand(() -> m_robotDrive.manualDrive(-m_driverController.getLeftY(), -m_driverController.getLeftX(), -m_driverController.getRightX()), m_robotDrive));
+
         // m_robotVision.setDefaultCommand(
         //     new RunCommand(() -> m_robotVision.visionPeriodic(), m_robotVision));
         
+        m_robotMechanisms.setDefaultCommand(
+
+            new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY()), m_robotMechanisms));
     }
 
     /*
@@ -87,6 +88,9 @@ public class RobotContainer {
         m_driverController.povUp().onTrue(Commands.runOnce(() -> m_robotDrive.restrictDriving(true)));
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
         m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath()));
+
+        m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.activateAlgae()));
+
 
 
 
