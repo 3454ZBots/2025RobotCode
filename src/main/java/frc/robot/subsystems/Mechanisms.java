@@ -49,7 +49,7 @@ public class Mechanisms extends SubsystemBase{
 
         elevatorPIDright.setReference(MechanismConstants.CORAL_TROUGH_HEIGHT, SparkMax.ControlType.kPosition);
         elevatorPIDleft.setReference(MechanismConstants.CORAL_TROUGH_HEIGHT, SparkMax.ControlType.kPosition);
-
+        
 
     }
 
