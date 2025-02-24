@@ -6,7 +6,8 @@ import frc.robot.constants.BasicConstants.ControllerConstants;
 import frc.robot.constants.MechanismConstants;
 import frc.robot.constants.SwerveConstants.SwerveDriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Mechanisms;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.MechanismSubsystem;
 import frc.robot.subsystems.PathSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -44,9 +45,11 @@ public class RobotContainer {
     //Subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final PathSubsystem m_robotPath = new PathSubsystem(m_robotDrive);
+    private final ElevatorSubsystem m_robotElevator = new ElevatorSubsystem();
+    private final MechanismSubsystem m_robotMechanisms = new MechanismSubsystem();
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
-    private final Mechanisms m_robotMechanisms = new Mechanisms();
+    
     //DigitalInput opticalSensor = new DigitalInput(MechanismConstants.SENSOR_DIO_PORT);
     //Trigger opticalTrigger = new Trigger(opticalSensor::get);
 
@@ -89,8 +92,9 @@ public class RobotContainer {
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
         m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath()));
 
-        m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.activateAlgae()));
-
+        //m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.activateAlgae()));
+        m_mechanismController.a().whileTrue(m_robotElevator.forwardTest());
+        m_mechanismController.b().whileTrue(m_robotElevator.backwardTest());
 
 
 

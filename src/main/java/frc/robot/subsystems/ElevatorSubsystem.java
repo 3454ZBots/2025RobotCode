@@ -4,13 +4,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Rotations;
@@ -19,8 +24,9 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 public class ElevatorSubsystem extends SubsystemBase {
 
 
-    SparkMax motor = new SparkMax(9999, MotorType.kBrushless);
-    RelativeEncoder encoder = motor.getEncoder();
+    private SparkMax motor = new SparkMax(9999, MotorType.kBrushless);
+    private RelativeEncoder encoder = motor.getEncoder();
+    private DigitalInput bottomSwitch = new DigitalInput(0);
 
     private static double kDt = 0.02;
     private static double kMaxVelocity = 0.3;
@@ -38,6 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final TrapezoidProfile.Constraints m_constraints = new TrapezoidProfile.Constraints(kMaxVelocity, kMaxAcceleration);
     private final ProfiledPIDController m_controller = new ProfiledPIDController(kP, kI, kD, m_constraints, kDt);
     private final ElevatorFeedforward m_feedforward = new ElevatorFeedforward(kS, kG, kV);
+    
 
     // Creates a SysIdRoutine
     SysIdRoutine routine = new SysIdRoutine(
@@ -54,6 +61,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void Go() {
+        
         motor.setVoltage(
         m_controller.calculate(encoder.getPosition())
             + m_feedforward.calculate(m_controller.getSetpoint().velocity));
@@ -63,5 +71,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         motor.set(0);
     }
 
+    //Probably Down
+    public Command forwardTest() {
+        return routine.dynamic(Direction.kForward);
+    }
+
+    //Probably Up
+    public Command backwardTest() {
+        return routine.dynamic(Direction.kReverse);
+    }
+
+    @Override
+    public void periodic() {
+        if(motor.getAppliedOutput() > 0 && bottomSwitch.get()) {
+            motor.set(0);
+        }
+    }
 
 }

@@ -32,7 +32,7 @@ public class PathSubsystem extends SubsystemBase{
     public void followpath(){
 
         Pose2d startPose2d = driveSubsystem.getVisionPose();
-        driveSubsystem.m_odometry.resetPose(startPose2d); //?
+        driveSubsystem.m_odometry.resetPose(startPose2d); //THIS IS MISSION CRITICAL
         Pose2d endPose2d = AutoConstants.AutoDriveConstants.m_centered;
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose2d, endPose2d);

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.MechanismConstants;
 
-public class Mechanisms extends SubsystemBase{
+public class MechanismSubsystem extends SubsystemBase{
     
     private SparkMax elevatorRight;
     private SparkMax elevatorLeft;
@@ -24,7 +24,7 @@ public class Mechanisms extends SubsystemBase{
 
     boolean algaeActivated = false;
 
-    public Mechanisms(){
+    public MechanismSubsystem(){
 
             elevatorRight = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
             elevatorLeft = new SparkMax(MechanismConstants.ELEVATOR_LEFT_ID, MotorType.kBrushless);
