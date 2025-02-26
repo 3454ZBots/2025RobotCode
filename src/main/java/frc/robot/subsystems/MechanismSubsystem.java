@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -13,25 +14,29 @@ import frc.robot.constants.MechanismConstants;
 public class MechanismSubsystem extends SubsystemBase{
     
     private SparkMax elevatorRight;
-    private SparkMax elevatorLeft;
+    private SparkMax elevatorLeftWhichIsAFollowerSoDoNotUseIt;
     private SparkMax coral;
     private SparkClosedLoopController elevatorPIDright;
     private SparkClosedLoopController elevatorPIDleft;
     private DigitalInput opticalSensor;
 
-    private SparkMax algaeRoller;
+    private SparkFlex algaeRoller;
     private SparkMax algaeWrist;
 
-    boolean algaeActivated = false;
+    int algaeActivated = 0;
 
     public MechanismSubsystem(){
 
             elevatorRight = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
-            elevatorLeft = new SparkMax(MechanismConstants.ELEVATOR_LEFT_ID, MotorType.kBrushless);
+
+            //May not need to define this one
+            elevatorLeftWhichIsAFollowerSoDoNotUseIt = new SparkMax(MechanismConstants.ELEVATOR_LEFT_ID, MotorType.kBrushless);
+            
+            
             coral = new SparkMax(MechanismConstants.CORAL_ID, MotorType.kBrushless);
 
-            elevatorPIDright = elevatorRight.getClosedLoopController();
-            elevatorPIDleft = elevatorLeft.getClosedLoopController();
+            //elevatorPIDright = elevatorRight.getClosedLoopController();
+           // elevatorPIDleft = elevatorLeft.getClosedLoopController();
 
            //Three motors (Coral Intake) (2 elevator motors, L and R),
            //all neos, one optical sensor (Stops intake of coral), two encoders
@@ -39,65 +44,67 @@ public class MechanismSubsystem extends SubsystemBase{
            //Algae: 1 motor for roller, 1 motor for "wrist"
            //SparkMAX's ?? Or old Spark's 
            //Any optical/ultrasonic sensors for the algae?
-           algaeRoller = new SparkMax(-9999, MotorType.kBrushless);
-           algaeWrist = new SparkMax(-9999, MotorType.kBrushless);
+           algaeRoller = new SparkFlex(MechanismConstants.ALGAE_ROLLER_ID, MotorType.kBrushless);
+           algaeWrist = new SparkMax(MechanismConstants.ALGAE_WRIST_ID, MotorType.kBrushless);
 
             
     }
 
-    public void coralTrough(){
+    // public void coralTrough(){
 
-        elevatorPIDright.setReference(MechanismConstants.CORAL_TROUGH_HEIGHT, SparkMax.ControlType.kPosition);
-        elevatorPIDleft.setReference(MechanismConstants.CORAL_TROUGH_HEIGHT, SparkMax.ControlType.kPosition);
+    //     elevatorPIDright.setReference(MechanismConstants.CORAL_TROUGH_HEIGHT, SparkMax.ControlType.kPosition);
+    //     elevatorPIDleft.setReference(MechanismConstants.CORAL_TROUGH_HEIGHT, SparkMax.ControlType.kPosition);
         
 
-    }
+    // }
 
-    public void coralLow(){
+    // public void coralLow(){
 
-        elevatorPIDright.setReference(MechanismConstants.CORAL_LOW_HEIGHT, SparkMax.ControlType.kPosition);
-        elevatorPIDleft.setReference(MechanismConstants.CORAL_LOW_HEIGHT, SparkMax.ControlType.kPosition);
+    //     elevatorPIDright.setReference(MechanismConstants.CORAL_LOW_HEIGHT, SparkMax.ControlType.kPosition);
+    //     elevatorPIDleft.setReference(MechanismConstants.CORAL_LOW_HEIGHT, SparkMax.ControlType.kPosition);
 
-    }
+    // }
 
-    public void coralMedium(){
+    // public void coralMedium(){
 
-        elevatorPIDright.setReference(MechanismConstants.CORAL_MEDIUM_HEIGHT, SparkMax.ControlType.kPosition);
-        elevatorPIDleft.setReference(MechanismConstants.CORAL_MEDIUM_HEIGHT, SparkMax.ControlType.kPosition);
-    }
+    //     elevatorPIDright.setReference(MechanismConstants.CORAL_MEDIUM_HEIGHT, SparkMax.ControlType.kPosition);
+    //     elevatorPIDleft.setReference(MechanismConstants.CORAL_MEDIUM_HEIGHT, SparkMax.ControlType.kPosition);
+    // }
 
-    public void coralHigh(){
+    // public void coralHigh(){
 
-        elevatorPIDright.setReference(MechanismConstants.CORAL_HIGH_HEIGHT, SparkMax.ControlType.kPosition);
-        elevatorPIDleft.setReference(MechanismConstants.CORAL_HIGH_HEIGHT, SparkMax.ControlType.kPosition);
+    //     elevatorPIDright.setReference(MechanismConstants.CORAL_HIGH_HEIGHT, SparkMax.ControlType.kPosition);
+    //     elevatorPIDleft.setReference(MechanismConstants.CORAL_HIGH_HEIGHT, SparkMax.ControlType.kPosition);
 
-    }
+    // }
 
     public void intakeCoral(){
         coral.set(0.5);
         //Turn on intake for coral, needs to be turned off seperately
     }
 
-    public void stopintake(){
+    public void stopIntake(){
         coral.set(0);
     }
 
-    public void activateAlgae(){
-        
-        if (algaeActivated == false) {
-            algaeRoller.set(0.5);
-            
-            algaeActivated = true;
-
-        } else if(algaeActivated) {
-
-            algaeRoller.set(-0.5);
-        
-    
-            algaeActivated = false;
-            new SequentialCommandGroup(Commands.waitSeconds(1), Commands.runOnce(()-> stopAlgae())).schedule();
+    public void oneAlgae(){
+        if(algaeRoller.getAppliedOutput() < 0) {
+            algaeRoller.set(0);
         }
+        else if(algaeRoller.getAppliedOutput() == 0) {
+            algaeRoller.set(-0.5);
+        }
+        
 
+    }
+
+    public void twoAlgae() {
+        if(algaeRoller.getAppliedOutput() > 0) {
+            algaeRoller.set(0);
+        }
+        else if(algaeRoller.getAppliedOutput() == 0) {
+            algaeRoller.set(0.5);
+        }
     }
 
     public void stopAlgae(){
@@ -105,10 +112,10 @@ public class MechanismSubsystem extends SubsystemBase{
 
     } 
 
-    public void wrist(double wristvalue){
+    public void wrist(double wristvalue, double elevatorvalue){
 
-        algaeWrist.set(wristvalue * -0.25);
-
+        algaeWrist.set(wristvalue * 0.15);
+        elevatorRight.set(elevatorvalue * 0.3);
     }
 
 

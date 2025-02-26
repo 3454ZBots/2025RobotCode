@@ -45,7 +45,7 @@ public class RobotContainer {
     //Subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final PathSubsystem m_robotPath = new PathSubsystem(m_robotDrive);
-    private final ElevatorSubsystem m_robotElevator = new ElevatorSubsystem();
+    //private final ElevatorSubsystem m_robotElevator = new ElevatorSubsystem();
     private final MechanismSubsystem m_robotMechanisms = new MechanismSubsystem();
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
@@ -72,7 +72,7 @@ public class RobotContainer {
         
         m_robotMechanisms.setDefaultCommand(
 
-            new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY()), m_robotMechanisms));
+            new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY(), m_mechanismController.getRightY()), m_robotMechanisms));
     }
 
     /*
@@ -92,9 +92,12 @@ public class RobotContainer {
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
         m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath()));
 
-        //m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.activateAlgae()));
-        m_mechanismController.a().whileTrue(m_robotElevator.forwardTest());
-        m_mechanismController.b().whileTrue(m_robotElevator.backwardTest());
+        m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
+        m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
+        m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
+        m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
+        //m_mechanismController.a().whileTrue(m_robotElevator.forwardTest());
+        //m_mechanismController.b().whileTrue(m_robotElevator.backwardTest());
 
 
 
