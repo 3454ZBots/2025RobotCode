@@ -1,7 +1,7 @@
 package frc.robot;
 
 
-import frc.robot.constants.AutoConstants.AutoDriveConstants;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.BasicConstants.ControllerConstants;
 import frc.robot.constants.MechanismConstants;
 import frc.robot.constants.SwerveConstants.SwerveDriveConstants;
@@ -45,8 +45,8 @@ public class RobotContainer {
     //Subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final PathSubsystem m_robotPath = new PathSubsystem(m_robotDrive);
-    //private final ElevatorSubsystem m_robotElevator = new ElevatorSubsystem();
-    private final MechanismSubsystem m_robotMechanisms = new MechanismSubsystem();
+    private final ElevatorSubsystem m_robotElevator = new ElevatorSubsystem();
+    //private final MechanismSubsystem m_robotMechanisms = new MechanismSubsystem();
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
     
@@ -59,7 +59,7 @@ public class RobotContainer {
         configureBindings();
         configureAutoCommands();
         configureSmartDashboard();
-
+        
 
         //Setting the default commands for subsystems. These run repeatedly but only when the subsystem is NOT RUNNING A DIFFERENT COMMAND
         m_robotDrive.setDefaultCommand(
@@ -70,9 +70,9 @@ public class RobotContainer {
         // m_robotVision.setDefaultCommand(
         //     new RunCommand(() -> m_robotVision.visionPeriodic(), m_robotVision));
         
-        m_robotMechanisms.setDefaultCommand(
+        // m_robotMechanisms.setDefaultCommand(
 
-            new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY(), m_mechanismController.getRightY()), m_robotMechanisms));
+        //     new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY(), m_mechanismController.getRightY()), m_robotMechanisms));
     }
 
     /*
@@ -90,18 +90,17 @@ public class RobotContainer {
         m_driverController.rightBumper().onTrue(Commands.runOnce(() -> m_robotDrive.toggleFieldOriented()));
         m_driverController.povUp().onTrue(Commands.runOnce(() -> m_robotDrive.restrictDriving(true)));
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
-        m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath()));
+        m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath(true)));
 
-        m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
-        m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
-        m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
-        m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
-        //m_mechanismController.a().whileTrue(m_robotElevator.forwardTest());
-        //m_mechanismController.b().whileTrue(m_robotElevator.backwardTest());
+        //m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
+        //m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
+        // m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
+        // m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
+        m_mechanismController.a().whileTrue(m_robotElevator.dynamicForwardTest());
+        m_mechanismController.b().whileTrue(m_robotElevator.dynamicBackwardTest());
 
 
 
-        //when senor changes from not trigger to trigger
         //opticalTrigger.onTrue(Commands.runOnce(() -> m_mechanisms.stopintake()));
     }
 

@@ -6,6 +6,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.AutoConstants;
@@ -16,6 +18,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import frc.robot.LimelightHelpers;
 import com.pathplanner.lib.path.Waypoint;
 
 public class PathSubsystem extends SubsystemBase{
@@ -29,11 +32,28 @@ public class PathSubsystem extends SubsystemBase{
 
     }
 
-    public void followpath(){
+    public void followpath(boolean isLeft){
+        double id = LimelightHelpers.getFiducialID("limelight");
+
+        //Tag filtering only accepts reef tags. ID 0 means no target found
+        if(!((id > 5 && id < 12) || (id > 16 && id < 23))){
+            return;
+        }
+
 
         Pose2d startPose2d = driveSubsystem.getVisionPose();
         driveSubsystem.m_odometry.resetPose(startPose2d); //THIS IS MISSION CRITICAL
-        Pose2d endPose2d = AutoConstants.AutoDriveConstants.m_centered;
+        Pose2d endPose2d;
+
+        double[] tprs = LimelightHelpers.getTargetPose_RobotSpace("limelight");
+        Pose2d globalTargetPose = startPose2d.transformBy(new Transform2d(tprs[0], tprs[1], new Rotation2d()));
+        if(isLeft) {
+            endPose2d = globalTargetPose.transformBy(AutoConstants.LEFT_POST_TRANSFORM);
+    
+        }
+        else {
+            endPose2d = globalTargetPose.transformBy(AutoConstants.RIGHT_POST_TRANSFORM);
+        }
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose2d, endPose2d);
 

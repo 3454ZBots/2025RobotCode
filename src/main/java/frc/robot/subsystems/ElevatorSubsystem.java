@@ -8,6 +8,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.VelocityUnit;
+import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
@@ -15,16 +17,24 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.constants.MechanismConstants;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.units.VoltageUnit;
+
 
 public class ElevatorSubsystem extends SubsystemBase {
 
 
-    private SparkMax motor = new SparkMax(9999, MotorType.kBrushless);
+    private SparkMax motor = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
     private RelativeEncoder encoder = motor.getEncoder();
     private DigitalInput bottomSwitch = new DigitalInput(0);
 
@@ -45,11 +55,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final ProfiledPIDController m_controller = new ProfiledPIDController(kP, kI, kD, m_constraints, kDt);
     private final ElevatorFeedforward m_feedforward = new ElevatorFeedforward(kS, kG, kV);
     
+    
+    private Config sysConfig = new SysIdRoutine.Config(Volts.of(0.5).per(Second), Voltage.ofBaseUnits(1.5, Volts), Time.ofBaseUnits(5, Second));
 
     // Creates a SysIdRoutine
     SysIdRoutine routine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(motor::setVoltage, log -> {logMotors(log);}, this)
+        sysConfig,
+        new SysIdRoutine.Mechanism(voltage -> {safeVoltage(voltage);}, log -> {logMotors(log);}, this)
     );
 
     public void logMotors(SysIdRoutineLog log) {
@@ -58,6 +70,10 @@ public class ElevatorSubsystem extends SubsystemBase {
                     .angularPosition(Rotations.of(encoder.getPosition()))
                     .angularVelocity(
                         RotationsPerSecond.of(encoder.getVelocity()));
+    }
+
+    public void safeVoltage(Voltage voltage) {
+        motor.set(voltage.baseUnitMagnitude()/motor.getBusVoltage());
     }
 
     public void Go() {
@@ -71,14 +87,24 @@ public class ElevatorSubsystem extends SubsystemBase {
         motor.set(0);
     }
 
-    //Probably Down
-    public Command forwardTest() {
+    //Probably down
+    public Command dynamicForwardTest() {
         return routine.dynamic(Direction.kForward);
     }
 
-    //Probably Up
-    public Command backwardTest() {
+    //Probably up
+    public Command dynamicBackwardTest() {
         return routine.dynamic(Direction.kReverse);
+    }
+
+    //Also probably down
+    public Command staticForwardTest() {
+        return routine.quasistatic(Direction.kForward);
+    }
+
+    //Also probably up
+    public Command staticBackwardTest() {
+        return routine.quasistatic(Direction.kReverse);
     }
 
     @Override

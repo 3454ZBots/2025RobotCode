@@ -6,6 +6,8 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +26,8 @@ public class MechanismSubsystem extends SubsystemBase{
     private SparkMax algaeWrist;
 
     int algaeActivated = 0;
+    private DigitalInput bottomSwitch = new DigitalInput(0);
+    private DigitalInput topSwitch = new DigitalInput(1);
 
     public MechanismSubsystem(){
 
@@ -46,9 +50,25 @@ public class MechanismSubsystem extends SubsystemBase{
            //Any optical/ultrasonic sensors for the algae?
            algaeRoller = new SparkFlex(MechanismConstants.ALGAE_ROLLER_ID, MotorType.kBrushless);
            algaeWrist = new SparkMax(MechanismConstants.ALGAE_WRIST_ID, MotorType.kBrushless);
-
             
     }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putBoolean("Down Elevator", bottomSwitch.get());
+        SmartDashboard.putBoolean("Up Elevator", topSwitch.get());
+        SmartDashboard.putNumber("Elevator Motor Output", elevatorRight.getAppliedOutput());
+        
+        if(elevatorRight.getAppliedOutput() > 0 && !bottomSwitch.get()) {
+            elevatorRight.set(0);
+        } else if(!topSwitch.get() && elevatorRight.getAppliedOutput() < 0 ){
+
+
+        }
+
+        
+    }
+
 
     // public void coralTrough(){
 
@@ -87,19 +107,18 @@ public class MechanismSubsystem extends SubsystemBase{
         coral.set(0);
     }
 
-    public void oneAlgae(){
-        if(algaeRoller.getAppliedOutput() < 0) {
+
+    public void oneAlgae() {
+        if(algaeRoller.getAppliedOutput() != 0) {
             algaeRoller.set(0);
         }
         else if(algaeRoller.getAppliedOutput() == 0) {
             algaeRoller.set(-0.5);
         }
-        
-
     }
 
     public void twoAlgae() {
-        if(algaeRoller.getAppliedOutput() > 0) {
+        if(algaeRoller.getAppliedOutput() != 0) {
             algaeRoller.set(0);
         }
         else if(algaeRoller.getAppliedOutput() == 0) {
@@ -109,13 +128,23 @@ public class MechanismSubsystem extends SubsystemBase{
 
     public void stopAlgae(){
             algaeRoller.set(0);
-
     } 
 
     public void wrist(double wristvalue, double elevatorvalue){
+        if(elevatorvalue < 0.05 && elevatorvalue > -0.05) {
+            elevatorvalue = 0;
+        }
+
 
         algaeWrist.set(wristvalue * 0.15);
-        elevatorRight.set(elevatorvalue * 0.3);
+        //elevatorRight.set(elevatorvalue * 0.3);
+
+        if(elevatorvalue > 0 && !bottomSwitch.get()) {
+            //elevatorRight.set(0);
+        } else if(!topSwitch.get() && elevatorvalue < 0 ){
+
+
+        }
     }
 
 
