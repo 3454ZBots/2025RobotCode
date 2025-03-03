@@ -137,11 +137,11 @@ public class MechanismSubsystem extends SubsystemBase{
 
 
         algaeWrist.set(wristvalue * 0.15);
-        //elevatorRight.set(elevatorvalue * 0.3);
+        elevatorRight.set(elevatorvalue * 0.3);
 
         if(elevatorvalue > 0 && !bottomSwitch.get()) {
-            //elevatorRight.set(0);
-        } else if(!topSwitch.get() && elevatorvalue < 0 ){
+            elevatorRight.set(0);
+        } else if(!topSwitch.get() && elevatorvalue < 0 ) {
 
 
         }

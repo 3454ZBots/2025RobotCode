@@ -55,8 +55,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final ProfiledPIDController m_controller = new ProfiledPIDController(kP, kI, kD, m_constraints, kDt);
     private final ElevatorFeedforward m_feedforward = new ElevatorFeedforward(kS, kG, kV);
     
-    
-    private Config sysConfig = new SysIdRoutine.Config(Volts.of(0.5).per(Second), Voltage.ofBaseUnits(1.5, Volts), Time.ofBaseUnits(5, Second));
+    //10.5 dynamic test time
+    private Config sysConfig = new SysIdRoutine.Config(Volts.of(0.9).per(Second), Voltage.ofBaseUnits(1.4, Volts), Time.ofBaseUnits(10.5, Second));
 
     // Creates a SysIdRoutine
     SysIdRoutine routine = new SysIdRoutine(
@@ -66,10 +66,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void logMotors(SysIdRoutineLog log) {
         log.motor("shooter-wheel")
-                    .voltage(Voltage.ofBaseUnits(motor.getBusVoltage()*motor.getAppliedOutput(), Volts))
-                    .angularPosition(Rotations.of(encoder.getPosition()))
+                    .voltage(Voltage.ofBaseUnits(motor.getBusVoltage()*motor.getAppliedOutput()*-1, Volts))
+                    .angularPosition(Rotations.of(encoder.getPosition()*-1))
                     .angularVelocity(
-                        RotationsPerSecond.of(encoder.getVelocity()));
+                        RotationsPerSecond.of(encoder.getVelocity()*-1));
     }
 
     public void safeVoltage(Voltage voltage) {
