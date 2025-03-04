@@ -73,6 +73,9 @@ public class RobotContainer {
       //  m_robotMechanisms.setDefaultCommand(
 
         //    new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY(), m_mechanismController.getRightY()), m_robotMechanisms));
+
+        m_robotElevator.setDefaultCommand(
+            new RunCommand(() -> m_robotElevator.runElevator(), m_robotElevator));
     }
 
     /*
@@ -96,8 +99,10 @@ public class RobotContainer {
         //m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
        // m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
         //m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
-        m_mechanismController.a().whileTrue(m_robotElevator.dynamicForwardTest());
-        m_mechanismController.b().whileTrue(m_robotElevator.dynamicBackwardTest());
+        //m_mechanismController.x().whileTrue(m_robotElevator.staticForwardTest());
+        //m_mechanismController.y().whileTrue(m_robotElevator.staticBackwardTest());
+        m_mechanismController.a().whileTrue(Commands.runOnce(() -> m_robotElevator.Go()));
+        m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotElevator.Stop()));
 
 
 
