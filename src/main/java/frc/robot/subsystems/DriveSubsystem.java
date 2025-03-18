@@ -21,6 +21,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.wpilibj.DigitalGlitchFilter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -77,6 +79,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     private SwerveModulePosition[] m_swerveModulePositions;
 
+    //private DigitalInput sensor = new DigitalInput(2);
+
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
         m_gyro.setYaw(0); //Robot assumes it is facing perfectly forward initially, this is actually called when it first connects to driverstation
@@ -124,6 +128,10 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() 
     {
+        //SmartDashboard.putBoolean("Coral Sensor", sensor.get());
+
+
+
         /*
          * All of this updates the the robot pose (i.e. where the robot thinks it is relative to the field)
          * and publishes that pose to advantageScope

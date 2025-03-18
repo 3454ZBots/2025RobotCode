@@ -46,12 +46,12 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final PathSubsystem m_robotPath = new PathSubsystem(m_robotDrive);
     private final ElevatorSubsystem m_robotElevator = new ElevatorSubsystem();
-  //  private final MechanismSubsystem m_robotMechanisms = new MechanismSubsystem();
+    private final MechanismSubsystem m_robotMechanisms = new MechanismSubsystem();
     //private final VisionSubsystem m_robotVision = new VisionSubsystem(m_robotDrive);
     
     
-    //DigitalInput opticalSensor = new DigitalInput(MechanismConstants.SENSOR_DIO_PORT);
-    //Trigger opticalTrigger = new Trigger(opticalSensor::get);
+    DigitalInput opticalSensor = new DigitalInput(MechanismConstants.SENSOR_DIO_PORT);
+    Trigger opticalTrigger = new Trigger(opticalSensor::get);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -97,16 +97,18 @@ public class RobotContainer {
 
         //m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
         //m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
-       // m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
-        //m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
+        m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
+        m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
         //m_mechanismController.x().whileTrue(m_robotElevator.staticForwardTest());
         //m_mechanismController.y().whileTrue(m_robotElevator.staticBackwardTest());
-        m_mechanismController.a().whileTrue(Commands.runOnce(() -> m_robotElevator.Go()));
-        m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotElevator.Stop()));
+        m_mechanismController.povDown().onTrue(Commands.runOnce(() -> m_robotElevator.trough()));
+        m_mechanismController.povUp().onTrue(Commands.runOnce(() -> m_robotElevator.high()));
+        m_mechanismController.povLeft().onTrue(Commands.runOnce(() -> m_robotElevator.low()));
+        m_mechanismController.povRight().onTrue(Commands.runOnce(() -> m_robotElevator.middle()));
 
 
 
-        //opticalTrigger.onTrue(Commands.runOnce(() -> m_mechanisms.stopintake()));
+        opticalTrigger.onFalse(new SequentialCommandGroup(Commands.waitSeconds(0.1), Commands.runOnce(() -> m_robotMechanisms.stopIntake())));
     }
 
     /**

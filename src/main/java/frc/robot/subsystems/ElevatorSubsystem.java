@@ -38,16 +38,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     private SparkMax motor = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
     private RelativeEncoder encoder = motor.getEncoder();
     private DigitalInput bottomSwitch = new DigitalInput(0);
+    private double controllerGoal = 0;
 
     private static double kDt = 0.02;
     private static double kMaxVelocity = 0.7;
     private static double kMaxAcceleration = 0.06;
-    private static double kP = 0.0059971;
-    private static double kI = 0.0;
+    private static double kP = 0;
+    private static double kI = 0;
     private static double kD = 0.0;
-    private static double kS = 0.46363;
-    private static double kG = 0.59113;
-    private static double kV = 1.08166;
+    private static double kS = 0.1;
+    private static double kG = 0.95;
+    private static double kV = 4.0;
 
 
     // Create a PID controller whose setpoint's change is subject to maximum
@@ -83,14 +84,24 @@ public class ElevatorSubsystem extends SubsystemBase {
         motor.set(voltage.baseUnitMagnitude()/motor.getBusVoltage());
     }
 
-    public void Go() {
-        m_controller.setGoal(2);
+    public void low() {
+        controllerGoal = 0.5;
         
     }
 
-    public void Stop() {
+    public void trough() {
         
-        m_controller.setGoal(0);
+        controllerGoal = 0;
+    }
+
+    public void middle() {
+        
+        controllerGoal = 1.2;
+    }
+
+    public void high() {
+        
+        controllerGoal = 2.25;
     }
 
     //Probably down
@@ -116,6 +127,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     public void runElevator() {
+    
+
+        m_controller.setGoal(controllerGoal);
+
         motor.setVoltage(
             m_controller.calculate(encoder.getPosition()*-1)
                 + m_feedforward.calculate(m_controller.getSetpoint().velocity)*-1);
@@ -124,7 +139,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Elevator Output", motor.getAppliedOutput()*-1);
         SmartDashboard.putNumber("Elevator FF output", m_feedforward.calculate(m_controller.getSetpoint().velocity)*-1);
         SmartDashboard.putNumber("Elevator Feedback", m_controller.calculate(encoder.getPosition()*-1));
-        SmartDashboard.putNumber("Elevator Goal", m_controller.getGoal().position);
+        SmartDashboard.putNumber("Elevator Goal", controllerGoal);
     }
 
 }

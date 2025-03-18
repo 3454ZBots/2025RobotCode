@@ -12,7 +12,7 @@ public final class MechanismConstants
     public static final double CORAL_LOW_HEIGHT = 0;
     public static final double CORAL_MEDIUM_HEIGHT = 0;
     public static final double CORAL_HIGH_HEIGHT = 0;
-    
+    public static final int SENSOR_DIO_PORT = 2;
 
 
 

@@ -26,15 +26,15 @@ public class MechanismSubsystem extends SubsystemBase{
     private SparkMax algaeWrist;
 
     int algaeActivated = 0;
-    private DigitalInput bottomSwitch = new DigitalInput(0);
-    private DigitalInput topSwitch = new DigitalInput(1);
+    //private DigitalInput bottomSwitch = new DigitalInput(0);
+    //private DigitalInput topSwitch = new DigitalInput(1);
 
     public MechanismSubsystem(){
 
-            elevatorRight = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
+            //elevatorRight = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
 
             //May not need to define this one
-            elevatorLeftWhichIsAFollowerSoDoNotUseIt = new SparkMax(MechanismConstants.ELEVATOR_LEFT_ID, MotorType.kBrushless);
+            //elevatorLeftWhichIsAFollowerSoDoNotUseIt = new SparkMax(MechanismConstants.ELEVATOR_LEFT_ID, MotorType.kBrushless);
             
             
             coral = new SparkMax(MechanismConstants.CORAL_ID, MotorType.kBrushless);
@@ -55,16 +55,16 @@ public class MechanismSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Down Elevator", bottomSwitch.get());
-        SmartDashboard.putBoolean("Up Elevator", topSwitch.get());
-        SmartDashboard.putNumber("Elevator Motor Output", elevatorRight.getAppliedOutput());
+        // SmartDashboard.putBoolean("Down Elevator", bottomSwitch.get());
+        // SmartDashboard.putBoolean("Up Elevator", topSwitch.get());
+        // SmartDashboard.putNumber("Elevator Motor Output", elevatorRight.getAppliedOutput());
         
-        if(elevatorRight.getAppliedOutput() > 0 && !bottomSwitch.get()) {
-            elevatorRight.set(0);
-        } else if(!topSwitch.get() && elevatorRight.getAppliedOutput() < 0 ){
+        // if(elevatorRight.getAppliedOutput() > 0 && !bottomSwitch.get()) {
+        //     elevatorRight.set(0);
+        // } else if(!topSwitch.get() && elevatorRight.getAppliedOutput() < 0 ){
 
 
-        }
+        // }
 
         
     }
@@ -137,14 +137,14 @@ public class MechanismSubsystem extends SubsystemBase{
 
 
         algaeWrist.set(wristvalue * 0.15);
-        elevatorRight.set(elevatorvalue * 0.3);
+        // elevatorRight.set(elevatorvalue * 0.3);
 
-        if(elevatorvalue > 0 && !bottomSwitch.get()) {
-            elevatorRight.set(0);
-        } else if(!topSwitch.get() && elevatorvalue < 0 ) {
+        // if(elevatorvalue > 0 && !bottomSwitch.get()) {
+        //     elevatorRight.set(0);
+        // } else if(!topSwitch.get() && elevatorvalue < 0 ) {
 
 
-        }
+        // }
     }
 
 
