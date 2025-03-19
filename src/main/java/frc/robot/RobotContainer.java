@@ -142,10 +142,5 @@ public class RobotContainer {
 
     public void printOutput(){
        
-        SmartDashboard.putNumber("Left Y: ", m_driverController.getLeftY());
-        SmartDashboard.putNumber("Left X: ", m_driverController.getLeftX());
-        SmartDashboard.putNumber("Right Y: ", m_driverController.getRightY());
-        SmartDashboard.putNumber("Right X: ", m_driverController.getRightX());
-        
     }
 }

@@ -138,8 +138,8 @@ public class DriveSubsystem extends SubsystemBase {
          */
         m_swerveModulePositions = getModulePositions();
         m_odometry.update(getHeading(), m_swerveModulePositions);
-        SmartDashboard.putNumber("odometery X", m_odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("odometery y", m_odometry.getPoseMeters().getY());
+        //SmartDashboard.putNumber("odometery X", m_odometry.getPoseMeters().getX());
+        //SmartDashboard.putNumber("odometery y", m_odometry.getPoseMeters().getY());
         m_PoseEstimator.update(getHeading(), m_swerveModulePositions);
         
         
@@ -170,15 +170,15 @@ public class DriveSubsystem extends SubsystemBase {
         publisher.set(states);
         
         //Info for debuging/PID tuning
-        SmartDashboard.putNumber("FL Distance", m_frontLeft.getPosition().distanceMeters);
-        SmartDashboard.putNumber("FR Distance", m_frontRight.getPosition().distanceMeters);
-        SmartDashboard.putNumber("RL Distance", m_rearLeft.getPosition().distanceMeters);
-        SmartDashboard.putNumber("RR Distance", m_rearRight.getPosition().distanceMeters);
+        // SmartDashboard.putNumber("FL Distance", m_frontLeft.getPosition().distanceMeters);
+        // SmartDashboard.putNumber("FR Distance", m_frontRight.getPosition().distanceMeters);
+        // SmartDashboard.putNumber("RL Distance", m_rearLeft.getPosition().distanceMeters);
+        // SmartDashboard.putNumber("RR Distance", m_rearRight.getPosition().distanceMeters);
             
-        SmartDashboard.putNumber("FL Speed", m_frontLeft.getState().speedMetersPerSecond);
-        SmartDashboard.putNumber("FR Speed", m_frontRight.getState().speedMetersPerSecond);
-        SmartDashboard.putNumber("RL Speed", m_rearLeft.getState().speedMetersPerSecond);
-        SmartDashboard.putNumber("RR Speed", m_rearRight.getState().speedMetersPerSecond);
+        // SmartDashboard.putNumber("FL Speed", m_frontLeft.getState().speedMetersPerSecond);
+        // SmartDashboard.putNumber("FR Speed", m_frontRight.getState().speedMetersPerSecond);
+        // SmartDashboard.putNumber("RL Speed", m_rearLeft.getState().speedMetersPerSecond);
+        // SmartDashboard.putNumber("RR Speed", m_rearRight.getState().speedMetersPerSecond);
 
         //for troubleshooting
         //fakefield.setRobotPose(new Pose2d(0, 0, getHeading()));
@@ -311,9 +311,9 @@ public class DriveSubsystem extends SubsystemBase {
 
         
 
-        SmartDashboard.putNumber("Rot", rot);
+        // SmartDashboard.putNumber("Rot", rot);
         SmartDashboard.putNumber("IMU Heading:", getHeading().getDegrees());
-        SmartDashboard.putNumber("IMU Turn Rate", getTurnRate());
+        // SmartDashboard.putNumber("IMU Turn Rate", getTurnRate());
 
         /*
          * The speeds passed into this method represent the intended movement of the entire robot, either from its perspective or
@@ -340,7 +340,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.setDesiredState(swerveModuleStates[3]);
 
 
-
+        m_frontRight.turnOneMotor();
     }
 
 

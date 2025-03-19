@@ -180,18 +180,18 @@ public class SwerveModule {
         double speedRPMs = correctedDesiredState.speedMetersPerSecond;
         double optimizedangle = correctedDesiredState.angle.getRadians();
 
-        SmartDashboard.putNumber("optimized angle", optimizedangle);
-        SmartDashboard.putNumber("drivespeed", speedRPMs);
-        SmartDashboard.putNumber("angle from encoder", m_turningEncoder.getPosition());
+        // SmartDashboard.putNumber("optimized angle", optimizedangle);
+        // SmartDashboard.putNumber("drivespeed", speedRPMs);
+        // SmartDashboard.putNumber("angle from encoder", m_turningEncoder.getPosition());
         /*
          * Command driving and turning SPARKS MAX towards their respective setpoints.
          * This actually tells the motors to move
          */
-        m_drivingPIDController.setReference(speedRPMs, SparkMax.ControlType.kVelocity);
-        m_turningPIDController.setReference(optimizedangle, SparkMax.ControlType.kPosition);
+        //m_drivingPIDController.setReference(speedRPMs, SparkMax.ControlType.kVelocity);
+        //m_turningPIDController.setReference(optimizedangle, SparkMax.ControlType.kPosition);
 
         //These should be usefull for PID tuning
-        SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkFlex.getDeviceId(), m_drivingEncoder.getVelocity());
+        // SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkFlex.getDeviceId(), m_drivingEncoder.getVelocity());
         SmartDashboard.putNumber("desired speed (RPMs) for Spark " + m_drivingSparkFlex.getDeviceId(), correctedDesiredState.speedMetersPerSecond);
 
 
@@ -202,6 +202,10 @@ public class SwerveModule {
     /** Zeroes all the SwerveModule encoders. */
     public void resetEncoders() {
         m_drivingEncoder.setPosition(0);
+    }
+
+    public void turnOneMotor() {
+        m_turningSparkMax.set(0.2);
     }
 
 
