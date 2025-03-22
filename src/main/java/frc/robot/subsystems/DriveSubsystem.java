@@ -340,7 +340,8 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.setDesiredState(swerveModuleStates[3]);
 
 
-        m_frontRight.turnOneMotor();
+        //m_frontRight.turnOneMotor();
+        
     }
 
 

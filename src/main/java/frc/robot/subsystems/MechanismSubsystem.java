@@ -99,7 +99,7 @@ public class MechanismSubsystem extends SubsystemBase{
     // }
 
     public void intakeCoral(){
-        coral.set(0.5);
+        coral.set(0.3);
         //Turn on intake for coral, needs to be turned off seperately
     }
 
@@ -130,10 +130,8 @@ public class MechanismSubsystem extends SubsystemBase{
             algaeRoller.set(0);
     } 
 
-    public void wrist(double wristvalue, double elevatorvalue){
-        if(elevatorvalue < 0.05 && elevatorvalue > -0.05) {
-            elevatorvalue = 0;
-        }
+    public void wrist(double wristvalue) {
+        
 
 
         algaeWrist.set(wristvalue * 0.15);

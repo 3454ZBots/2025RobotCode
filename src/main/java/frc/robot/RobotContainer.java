@@ -11,6 +11,7 @@ import frc.robot.subsystems.MechanismSubsystem;
 import frc.robot.subsystems.PathSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -70,9 +71,8 @@ public class RobotContainer {
         // m_robotVision.setDefaultCommand(
         //     new RunCommand(() -> m_robotVision.visionPeriodic(), m_robotVision));
         
-      //  m_robotMechanisms.setDefaultCommand(
-
-        //    new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY(), m_mechanismController.getRightY()), m_robotMechanisms));
+        m_robotMechanisms.setDefaultCommand(
+           new RunCommand(() -> m_robotMechanisms.wrist(m_mechanismController.getLeftY()), m_robotMechanisms));
 
         m_robotElevator.setDefaultCommand(
             new RunCommand(() -> m_robotElevator.runElevator(), m_robotElevator));
@@ -95,8 +95,8 @@ public class RobotContainer {
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
         m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath(true)));
 
-        //m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
-        //m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
+        m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
+        m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
         m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
         m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
         //m_mechanismController.x().whileTrue(m_robotElevator.staticForwardTest());
@@ -117,16 +117,30 @@ public class RobotContainer {
      */
     private void configureAutoCommands() {
         //Remember Commands.waitSeconds() is a thing
+        NamedCommands.registerCommand("Trough", Commands.runOnce(() -> m_robotElevator.trough()));
+        NamedCommands.registerCommand("Low", Commands.runOnce(() -> m_robotElevator.low()));
+        NamedCommands.registerCommand("Middle", Commands.runOnce(() -> m_robotElevator.middle()));
+        NamedCommands.registerCommand("High", Commands.runOnce(() -> m_robotElevator.high()));
+        NamedCommands.registerCommand("Run Coral", Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
+        NamedCommands.registerCommand("Stop Coral", Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
+
 
         
+
+
     }
 
     private void configureSmartDashboard() {
         SmartDashboard.putData("Auto choices", m_chooser);
-        SmartDashboard.putData("Angle choices", Anglechooser);
+        //SmartDashboard.putData("Angle choices", Anglechooser);
 
         m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
         m_chooser.setDefaultOption("Test", new PathPlannerAuto("Test Auto"));
+
+        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
+        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
+        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
+        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
 
     }
 

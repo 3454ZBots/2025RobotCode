@@ -123,8 +123,8 @@ public class SwerveModule {
             .smartCurrentLimit(SwerveModuleConstants.kTurningMotorCurrentLimit);
        
 
-        m_drivingSparkFlex.configure(m_drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_turningSparkMax.configure(m_turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        System.out.println(drivingCANId + " driving " + m_drivingSparkFlex.configure(m_drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        System.out.println(turningCANId+ " turning " + m_turningSparkMax.configure(m_turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
         
         //add description
@@ -187,8 +187,11 @@ public class SwerveModule {
          * Command driving and turning SPARKS MAX towards their respective setpoints.
          * This actually tells the motors to move
          */
-        //m_drivingPIDController.setReference(speedRPMs, SparkMax.ControlType.kVelocity);
-        //m_turningPIDController.setReference(optimizedangle, SparkMax.ControlType.kPosition);
+        //SmartDashboard.putString(m_drivingSparkFlex.getDeviceId() + " driving", m_drivingPIDController.setReference(speedRPMs, SparkMax.ControlType.kVelocity).toString());
+        //SmartDashboard.putString(m_turningSparkMax.getDeviceId() + " turning ", m_turningPIDController.setReference(optimizedangle, SparkMax.ControlType.kPosition).toString());
+
+        m_drivingPIDController.setReference(speedRPMs, SparkMax.ControlType.kVelocity);
+        m_turningPIDController.setReference(optimizedangle, SparkMax.ControlType.kPosition);
 
         //These should be usefull for PID tuning
         // SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkFlex.getDeviceId(), m_drivingEncoder.getVelocity());
@@ -207,6 +210,8 @@ public class SwerveModule {
     public void turnOneMotor() {
         m_turningSparkMax.set(0.2);
     }
+
+    
 
 
 }

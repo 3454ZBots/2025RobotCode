@@ -41,13 +41,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     private double controllerGoal = 0;
 
     private static double kDt = 0.02;
-    private static double kMaxVelocity = 0.7;
-    private static double kMaxAcceleration = 0.06;
-    private static double kP = 0;
+    private static double kMaxVelocity = 1;
+    private static double kMaxAcceleration = 0.1;
+    private static double kP = 0.01;
     private static double kI = 0;
     private static double kD = 0.0;
     private static double kS = 0.1;
-    private static double kG = 0.95;
+    private static double kG = 0.90;
     private static double kV = 4.0;
 
 
@@ -101,7 +101,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void high() {
         
-        controllerGoal = 2.25;
+        controllerGoal = 2.3;
     }
 
     //Probably down
@@ -128,17 +128,21 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void runElevator() {
     
+        SmartDashboard.putBoolean("lower limit switch", bottomSwitch.get());
+        if(bottomSwitch.get() == false) {
+            encoder.setPosition(0);
+        }
 
         m_controller.setGoal(controllerGoal);
 
         motor.setVoltage(
-            m_controller.calculate(encoder.getPosition()*-1)
-                + m_feedforward.calculate(m_controller.getSetpoint().velocity)*-1);
+             m_controller.calculate(encoder.getPosition()*-0.06075)
+                 + m_feedforward.calculate(m_controller.getSetpoint().velocity)*-1);
 
-        SmartDashboard.putNumber("Elevator Height", encoder.getPosition()*-1);
+        SmartDashboard.putNumber("Elevator Height", encoder.getPosition()*-0.06075);
         SmartDashboard.putNumber("Elevator Output", motor.getAppliedOutput()*-1);
         SmartDashboard.putNumber("Elevator FF output", m_feedforward.calculate(m_controller.getSetpoint().velocity)*-1);
-        SmartDashboard.putNumber("Elevator Feedback", m_controller.calculate(encoder.getPosition()*-1));
+        SmartDashboard.putNumber("Elevator Feedback", m_controller.calculate(encoder.getPosition()*-0.06075));
         SmartDashboard.putNumber("Elevator Goal", controllerGoal);
     }
 
