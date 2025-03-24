@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.AutoConstants;
@@ -15,6 +17,7 @@ import frc.robot.constants.AutoConstants;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindThenFollowPath;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -24,11 +27,17 @@ import com.pathplanner.lib.path.Waypoint;
 public class PathSubsystem extends SubsystemBase{
 
     DriveSubsystem driveSubsystem;
+    Field2d pathField;
+    Field2d targetField;
+
     
     public PathSubsystem(DriveSubsystem driveSubsystem){
 
         this.driveSubsystem = driveSubsystem;
-
+        pathField = new Field2d();
+        targetField = new Field2d();
+        SmartDashboard.putData("target field", targetField);
+        SmartDashboard.putData("path field", pathField);
 
     }
 
@@ -65,7 +74,13 @@ public class PathSubsystem extends SubsystemBase{
         
         //driveSubsystem.fakefield.setRobotPose(path.getPathPoses().get(path.getPathPoses().size()-1));
         
-        AutoBuilder.followPath(path).schedule();
+        //AutoBuilder.followPath(path).schedule();
+        pathField.setRobotPose(endPose2d);
+        targetField.setRobotPose(globalTargetPose);
+        
+        SmartDashboard.putNumber("tprs X", tprs[0]);
+        SmartDashboard.putNumber("tprs Y", tprs[1]);
+
 
     }
 

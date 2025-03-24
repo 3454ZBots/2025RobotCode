@@ -91,7 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
         
         SmartDashboard.putData("field pose", m_field);
         SmartDashboard.putData("Rotation 2D Pose", fakefield);
-
+        SmartDashboard.putBoolean("Field-Oriented", isFieldOriented);
 
     
         try {
@@ -144,16 +144,16 @@ public class DriveSubsystem extends SubsystemBase {
         
         
         
-        // LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        // LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        // if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2 != null && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        // {
+        LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2 != null && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
     
-        //     m_PoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        //     m_PoseEstimator.addVisionMeasurement(
-        //         mt2.pose,
-        //         mt2.timestampSeconds);
-        // }
+            m_PoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            m_PoseEstimator.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
+        }
 
         
 
@@ -235,6 +235,7 @@ public class DriveSubsystem extends SubsystemBase {
         
         System.out.println("ToggleFieldOriented "+isFieldOriented);
         SmartDashboard.putBoolean("Field-Oriented", isFieldOriented);
+        
         
     }
     public void restrictDriving(boolean dPadPressed)

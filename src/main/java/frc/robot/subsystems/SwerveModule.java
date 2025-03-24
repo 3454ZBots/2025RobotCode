@@ -195,7 +195,7 @@ public class SwerveModule {
 
         //These should be usefull for PID tuning
         // SmartDashboard.putNumber("driving encoder - Can ID" + m_drivingSparkFlex.getDeviceId(), m_drivingEncoder.getVelocity());
-        SmartDashboard.putNumber("desired speed (RPMs) for Spark " + m_drivingSparkFlex.getDeviceId(), correctedDesiredState.speedMetersPerSecond);
+        //SmartDashboard.putNumber("desired speed (RPMs) for Spark " + m_drivingSparkFlex.getDeviceId(), correctedDesiredState.speedMetersPerSecond);
 
 
         //Updates the modules internal state

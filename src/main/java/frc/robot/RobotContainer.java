@@ -94,11 +94,12 @@ public class RobotContainer {
         m_driverController.povUp().onTrue(Commands.runOnce(() -> m_robotDrive.restrictDriving(true)));
         m_driverController.povUp().onFalse(Commands.runOnce(() -> m_robotDrive.restrictDriving(false)));
         m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath(true)));
+        m_driverController.b().onTrue(Commands.runOnce(() -> m_robotPath.followpath(false)));
 
         m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
         m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
         m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
-        m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
+        m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.outputCoral()));
         //m_mechanismController.x().whileTrue(m_robotElevator.staticForwardTest());
         //m_mechanismController.y().whileTrue(m_robotElevator.staticBackwardTest());
         m_mechanismController.povDown().onTrue(Commands.runOnce(() -> m_robotElevator.trough()));
@@ -108,7 +109,7 @@ public class RobotContainer {
 
 
 
-        opticalTrigger.onFalse(new SequentialCommandGroup(Commands.waitSeconds(0.1), Commands.runOnce(() -> m_robotMechanisms.stopIntake())));
+        opticalTrigger.onFalse(new SequentialCommandGroup(Commands.waitSeconds(0.2), Commands.runOnce(() -> m_robotMechanisms.stopCoral())));
     }
 
     /**
@@ -122,7 +123,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Middle", Commands.runOnce(() -> m_robotElevator.middle()));
         NamedCommands.registerCommand("High", Commands.runOnce(() -> m_robotElevator.high()));
         NamedCommands.registerCommand("Run Coral", Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
-        NamedCommands.registerCommand("Stop Coral", Commands.runOnce(() -> m_robotMechanisms.stopIntake()));
+        NamedCommands.registerCommand("Stop Coral", Commands.runOnce(() -> m_robotMechanisms.stopCoral()));
 
 
         

@@ -32,7 +32,7 @@ public final class AutoConstants {
     public static final Pose2d m_centered = new Pose2d(2.97+0.37, 4.04, new Rotation2d());
 
     public static final Transform2d RIGHT_POST_TRANSFORM = new Transform2d(new Translation2d(-0.5, -0.5), new Rotation2d());
-    public static final Transform2d LEFT_POST_TRANSFORM = new Transform2d(new Translation2d(-0.5, -0.5), new Rotation2d());
+    public static final Transform2d LEFT_POST_TRANSFORM = new Transform2d(new Translation2d(-0.5, 0.5), new Rotation2d());
     
 
    
