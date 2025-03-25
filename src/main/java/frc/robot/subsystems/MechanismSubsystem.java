@@ -18,16 +18,11 @@ public class MechanismSubsystem extends SubsystemBase{
     private SparkMax elevatorRight;
     private SparkMax elevatorLeftWhichIsAFollowerSoDoNotUseIt;
     private SparkMax coral;
-    private SparkClosedLoopController elevatorPIDright;
-    private SparkClosedLoopController elevatorPIDleft;
-    private DigitalInput opticalSensor;
 
     private SparkFlex algaeRoller;
-    //private SparkMax algaeWrist;
+    private SparkMax algaeWrist;
 
     int algaeActivated = 0;
-    //private DigitalInput bottomSwitch = new DigitalInput(0);
-    //private DigitalInput topSwitch = new DigitalInput(1);
 
     public MechanismSubsystem(){
 
@@ -40,7 +35,7 @@ public class MechanismSubsystem extends SubsystemBase{
             coral = new SparkMax(MechanismConstants.CORAL_ID, MotorType.kBrushless);
 
             //elevatorPIDright = elevatorRight.getClosedLoopController();
-           // elevatorPIDleft = elevatorLeft.getClosedLoopController();
+            //elevatorPIDleft = elevatorLeft.getClosedLoopController();
 
            //Three motors (Coral Intake) (2 elevator motors, L and R),
            //all neos, one optical sensor (Stops intake of coral), two encoders
@@ -49,7 +44,7 @@ public class MechanismSubsystem extends SubsystemBase{
            //SparkMAX's ?? Or old Spark's 
            //Any optical/ultrasonic sensors for the algae?
            algaeRoller = new SparkFlex(MechanismConstants.ALGAE_ROLLER_ID, MotorType.kBrushless);
-           //algaeWrist = new SparkMax(MechanismConstants.ALGAE_WRIST_ID, MotorType.kBrushless);
+           algaeWrist = new SparkMax(MechanismConstants.ALGAE_WRIST_ID, MotorType.kBrushless);
             
     }
 
@@ -150,7 +145,7 @@ public class MechanismSubsystem extends SubsystemBase{
         
 
 
-        //algaeWrist.set(wristvalue * 0.15);
+        algaeWrist.set(wristvalue * 0.2);
         // elevatorRight.set(elevatorvalue * 0.3);
 
         // if(elevatorvalue > 0 && !bottomSwitch.get()) {

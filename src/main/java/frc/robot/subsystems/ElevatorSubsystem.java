@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static double kMaxVelocity = 1;
     private static double kMaxAcceleration = 0.1;
     private static double kP = 10;
-    private static double kI = 0;
+    private static double kI = 2;
     private static double kD = 0.0;
     private static double kS = 0.1;
     private static double kG = 0.80;
@@ -64,7 +64,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     
 
     public void low() {
-        m_controller.setGoal(0.5);
+        m_controller.setGoal(0.249971526708342);
 
     }
 
@@ -75,12 +75,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void middle() {
 
-        m_controller.setGoal(1);
+        m_controller.setGoal(0.668907214467653);
     }
 
     public void high() {
 
-        m_controller.setGoal(2.3);
+        m_controller.setGoal(1.289197577412927);
     }
 
 
@@ -95,8 +95,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
         motor.setVoltage(
-             m_controller.calculate(encoder.getPosition()*MechanismConstants.ELEVATOR_CONVERSION)*-1
-                 + m_feedforward.calculate(m_controller.getSetpoint().velocity)*-1);
+            m_controller.calculate(encoder.getPosition()*MechanismConstants.ELEVATOR_CONVERSION)*-1
+              +  m_feedforward.calculate(m_controller.getSetpoint().velocity)*-1);
 
         SmartDashboard.putNumber("Elevator Height", encoder.getPosition()*MechanismConstants.ELEVATOR_CONVERSION);
         SmartDashboard.putNumber("Elevator Output", motor.getAppliedOutput()*-1);

@@ -80,6 +80,7 @@ public class PathSubsystem extends SubsystemBase{
         
         SmartDashboard.putNumber("tprs X", tprs[0]);
         SmartDashboard.putNumber("tprs Y", tprs[1]);
+        SmartDashboard.putNumberArray("TPRS", tprs);
 
 
     }
