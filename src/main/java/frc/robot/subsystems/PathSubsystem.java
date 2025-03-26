@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -73,13 +74,15 @@ public class PathSubsystem extends SubsystemBase{
 
         
 
-        PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, new Rotation2d()));
+        PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, endPose2d.getRotation()));
 
         path.preventFlipping = true;
         
         //driveSubsystem.fakefield.setRobotPose(path.getPathPoses().get(path.getPathPoses().size()-1));
+        Command pathCommand = AutoBuilder.followPath(path);
         
-        new SequentialCommandGroup(AutoBuilder.followPath(path), Commands.runOnce(() -> driveSubsystem.manualDrive(0, 0, 0))).schedule();
+        new SequentialCommandGroup(pathCommand.withTimeout(5), Commands.runOnce(() -> driveSubsystem.manualDrive(0, 0, 0))).schedule();
+        //SmartDashboard.putBoolean("No longer pathing", pathCommand.isFinished());
         pathField.setRobotPose(endPose2d);
         targetField.setRobotPose(globalTargetPose);
         
