@@ -5,6 +5,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.AutoConstants;
+
+import static edu.wpi.first.units.Units.Degrees;
 
 import java.util.List;
 
@@ -55,7 +58,10 @@ public class PathSubsystem extends SubsystemBase{
         Pose2d endPose2d;
 
         double[] tprs = LimelightHelpers.getTargetPose_RobotSpace("limelight");
-        Pose2d globalTargetPose = startPose2d.transformBy(new Transform2d(tprs[0], tprs[1], new Rotation2d()));
+        Pose3d tpThreeD = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
+        Pose2d relativeTargetPose = new Pose2d(tpThreeD.getZ(), tpThreeD.getY(), new Rotation2d(tpThreeD.getRotation().getY()*-1));
+        Pose2d globalTargetPose = startPose2d.transformBy(new Transform2d(new Pose2d(), relativeTargetPose));
+        globalTargetPose = AutoConstants.EVERY_APRILTAG_POSE2D[(int) id].rotateBy(Rotation2d.fromDegrees(180));
         if(isLeft) {
             endPose2d = globalTargetPose.transformBy(AutoConstants.LEFT_POST_TRANSFORM);
     
@@ -78,9 +84,10 @@ public class PathSubsystem extends SubsystemBase{
         pathField.setRobotPose(endPose2d);
         targetField.setRobotPose(globalTargetPose);
         
-        SmartDashboard.putNumber("tprs X", tprs[0]);
-        SmartDashboard.putNumber("tprs Y", tprs[1]);
-        SmartDashboard.putNumberArray("TPRS", tprs);
+        //SmartDashboard.putNumber("Target Yaw", tpThreeD.getRotation().getZ());
+        //SmartDashboard.putNumber("Target Roll", tpThreeD.getRotation().getX());
+        //SmartDashboard.putNumber("Target Pitch - Actually Yaw", tpThreeD.getRotation().getY()*(180/Math.PI));
+       
 
 
     }

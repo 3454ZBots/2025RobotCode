@@ -76,6 +76,9 @@ public class RobotContainer {
 
         m_robotElevator.setDefaultCommand(
             new RunCommand(() -> m_robotElevator.runElevator(), m_robotElevator));
+
+        m_robotPath.setDefaultCommand(
+            new RunCommand(() -> m_robotPath.followpath(true), m_robotPath));
     }
 
     /*
