@@ -56,12 +56,8 @@ public class PathSubsystem extends SubsystemBase{
         Pose2d startPose2d = driveSubsystem.getVisionPose();
         driveSubsystem.m_odometry.resetPose(startPose2d); //THIS IS MISSION CRITICAL
         Pose2d endPose2d;
-
-        double[] tprs = LimelightHelpers.getTargetPose_RobotSpace("limelight");
-        Pose3d tpThreeD = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
-        Pose2d relativeTargetPose = new Pose2d(tpThreeD.getZ(), tpThreeD.getY(), new Rotation2d(tpThreeD.getRotation().getY()*-1));
-        Pose2d globalTargetPose = startPose2d.transformBy(new Transform2d(new Pose2d(), relativeTargetPose));
-        globalTargetPose = AutoConstants.EVERY_APRILTAG_POSE2D[(int) id].rotateBy(Rotation2d.fromDegrees(180));
+        Pose2d globalTargetPose = AutoConstants.EVERY_APRILTAG_POSE2D[(int) id].transformBy(new Transform2d(0, 0, Rotation2d.fromDegrees(180)));
+        
         if(isLeft) {
             endPose2d = globalTargetPose.transformBy(AutoConstants.LEFT_POST_TRANSFORM);
     
@@ -80,7 +76,7 @@ public class PathSubsystem extends SubsystemBase{
         
         //driveSubsystem.fakefield.setRobotPose(path.getPathPoses().get(path.getPathPoses().size()-1));
         
-        //AutoBuilder.followPath(path).schedule();
+        AutoBuilder.followPath(path).schedule();
         pathField.setRobotPose(endPose2d);
         targetField.setRobotPose(globalTargetPose);
         
