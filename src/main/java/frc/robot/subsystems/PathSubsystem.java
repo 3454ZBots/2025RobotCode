@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.AutoConstants;
 
@@ -32,6 +33,7 @@ public class PathSubsystem extends SubsystemBase{
     DriveSubsystem driveSubsystem;
     Field2d pathField;
     Field2d targetField;
+    PathConstraints constraints;
 
     
     public PathSubsystem(DriveSubsystem driveSubsystem){
@@ -41,6 +43,7 @@ public class PathSubsystem extends SubsystemBase{
         targetField = new Field2d();
         SmartDashboard.putData("target field", targetField);
         SmartDashboard.putData("path field", pathField);
+        constraints = new PathConstraints(3.0, 1.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
 
     }
 
@@ -68,7 +71,7 @@ public class PathSubsystem extends SubsystemBase{
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose2d, endPose2d);
 
-        PathConstraints constraints = new PathConstraints(3.0, 1.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+        
 
         PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, new Rotation2d()));
 
@@ -76,7 +79,7 @@ public class PathSubsystem extends SubsystemBase{
         
         //driveSubsystem.fakefield.setRobotPose(path.getPathPoses().get(path.getPathPoses().size()-1));
         
-        AutoBuilder.followPath(path).schedule();
+        new SequentialCommandGroup(AutoBuilder.followPath(path), Commands.runOnce(() -> driveSubsystem.manualDrive(0, 0, 0))).schedule();
         pathField.setRobotPose(endPose2d);
         targetField.setRobotPose(globalTargetPose);
         
