@@ -15,16 +15,22 @@ import frc.robot.constants.MechanismConstants;
 
 public class MechanismSubsystem extends SubsystemBase{
     
-    private SparkMax elevatorRight;
-    private SparkMax elevatorLeftWhichIsAFollowerSoDoNotUseIt;
+    
     private SparkMax coral;
 
     private SparkFlex algaeRoller;
     private SparkMax algaeWrist;
 
+    private boolean coralFast = false;
+    private boolean coralSlow = false
+    ;
+
+    private boolean algaeFront = false;
+    private boolean algaeBack = false;
+
     int algaeActivated = 0;
 
-    public MechanismSubsystem(){
+    public MechanismSubsystem() {
 
             //elevatorRight = new SparkMax(MechanismConstants.ELEVATOR_RIGHT_ID, MotorType.kBrushless);
 
@@ -45,6 +51,10 @@ public class MechanismSubsystem extends SubsystemBase{
            //Any optical/ultrasonic sensors for the algae?
            algaeRoller = new SparkFlex(MechanismConstants.ALGAE_ROLLER_ID, MotorType.kBrushless);
            algaeWrist = new SparkMax(MechanismConstants.ALGAE_WRIST_ID, MotorType.kBrushless);
+           SmartDashboard.putBoolean("Coral Slow", coralSlow);
+           SmartDashboard.putBoolean("Coral Fast", coralFast);
+           SmartDashboard.putBoolean("Algae Front", algaeFront);
+           SmartDashboard.putBoolean("Algae Back", algaeBack);
             
     }
 
@@ -93,52 +103,85 @@ public class MechanismSubsystem extends SubsystemBase{
 
     // }
 
-    public void intakeCoral(){
+    public void slowCoral(){
         if(coral.get() != 0) {
             coral.set(0);
+            coralFast = false;
+            coralSlow = false;
         }
         else {
             coral.set(0.3);
+            coralFast = false;
+            coralSlow = true;
         }
+        SmartDashboard.putBoolean("Coral Slow", coralSlow);
+        SmartDashboard.putBoolean("Coral Fast", coralFast);
         
     }
 
     public void stopCoral(){
         coral.set(0);
+        coralFast = false;
+        coralSlow = false;
+        SmartDashboard.putBoolean("Coral Slow", coralSlow);
+        SmartDashboard.putBoolean("Coral Fast", coralFast);
     }
 
-    public void outputCoral() {
+    public void fastCoral() {
         if(coral.get() != 0) {
             coral.set(0);
+            coralFast = false;
+            coralSlow = false;
         }
         else {
             coral.set(0.7);
+            coralFast = true;
+            coralSlow = false;
         }
+        SmartDashboard.putBoolean("Coral Slow", coralSlow);
+        SmartDashboard.putBoolean("Coral Fast", coralFast);
 
         
     }
 
 
-    public void oneAlgae() {
+    public void backAlgae() {
         if(algaeRoller.getAppliedOutput() != 0) {
             algaeRoller.set(0);
+            algaeBack = false;
+            algaeFront = false;
+            
         }
         else if(algaeRoller.getAppliedOutput() == 0) {
             algaeRoller.set(-0.5);
+            algaeBack = true;
+            algaeFront = false;
         }
+        SmartDashboard.putBoolean("Algae Front", algaeFront);
+        SmartDashboard.putBoolean("Algae Back", algaeBack);
     }
 
-    public void twoAlgae() {
+    public void frontAlgae() {
         if(algaeRoller.getAppliedOutput() != 0) {
             algaeRoller.set(0);
+            algaeBack = false;
+            algaeFront = false;
         }
         else if(algaeRoller.getAppliedOutput() == 0) {
             algaeRoller.set(0.5);
+            algaeFront = true;
+            algaeBack = false;
         }
+        SmartDashboard.putBoolean("Algae Front", algaeFront);
+        SmartDashboard.putBoolean("Algae Back", algaeBack);
     }
 
     public void stopAlgae(){
-            algaeRoller.set(0);
+        algaeRoller.set(0);
+        algaeBack = false;
+        algaeFront = false;
+        SmartDashboard.putBoolean("Algae Front", algaeFront);
+        SmartDashboard.putBoolean("Algae Back", algaeBack);
     } 
 
     public void wrist(double wristvalue) {

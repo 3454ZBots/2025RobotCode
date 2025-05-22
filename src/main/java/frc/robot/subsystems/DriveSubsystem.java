@@ -140,11 +140,20 @@ public class DriveSubsystem extends SubsystemBase {
         m_odometry.update(getHeading(), m_swerveModulePositions);
         //SmartDashboard.putNumber("odometery X", m_odometry.getPoseMeters().getX());
         //SmartDashboard.putNumber("odometery y", m_odometry.getPoseMeters().getY());
-        m_PoseEstimator.update(getHeading(), m_swerveModulePositions);
         
         
         
-        LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+            m_PoseEstimator.update(getHeading().plus(Rotation2d.fromDegrees(180)), m_swerveModulePositions);
+            LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            
+        }
+        else {
+            m_PoseEstimator.update(getHeading(), m_swerveModulePositions);
+            LimelightHelpers.SetRobotOrientation("limelight", m_PoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            
+        }
+        
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         if(Math.abs(m_gyro.getAngularVelocityZWorld().getValueAsDouble()) <= 720 && mt2 != null && mt2.tagCount != 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         {
@@ -278,17 +287,17 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void manualDrive(double xSpeed, double ySpeed, double rot) {
         //Dead Zones
-        if (Math.abs(xSpeed) < 0.05) 
+        if (Math.abs(xSpeed) < 0.02) 
         {
             xSpeed = 0;
         }
 
-        if (Math.abs(ySpeed) < 0.05) 
+        if (Math.abs(ySpeed) < 0.02) 
         {
             ySpeed = 0;
         }
 
-        if (Math.abs(rot) < 0.05) 
+        if (Math.abs(rot) < 0.02) 
         {
             rot = 0;
         }
@@ -299,9 +308,9 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         //Quadratic Scaling
-        xSpeed *= Math.abs(xSpeed);
-        ySpeed *= Math.abs(ySpeed);
-        rot *= Math.abs(rot);
+        xSpeed *= Math.abs(xSpeed)*0.9;
+        ySpeed *= Math.abs(ySpeed)*0.9;
+        rot *= Math.abs(rot)*0.9;
 
 
 
@@ -321,7 +330,7 @@ public class DriveSubsystem extends SubsystemBase {
          * relative to the field. This determines what each swerve module needs to do to achieve that
          */
         if(isFieldOriented) {
-            drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading()));
+            drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading().plus(Rotation2d.fromDegrees(180))));
         }
         else {
             drive(new ChassisSpeeds(xSpeed, ySpeed, rot));

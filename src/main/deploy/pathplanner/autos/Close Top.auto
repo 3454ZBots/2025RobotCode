@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Blue Barge to Left Top Reef"
+            "pathName": "Middle Blue Barge to Right Top Reef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align Right"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
           }
         },
         {
@@ -25,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Run Coral Fast"
+            "name": "Run Coral"
           }
         },
         {

@@ -42,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private static double kDt = 0.02;
     private static double kMaxVelocity = 3;
-    private static double kMaxAcceleration = 0.4;
+    private static double kMaxAcceleration = 0.5;
     private static double kP = 10;
     private static double kI = 2;
     private static double kD = 0.0;

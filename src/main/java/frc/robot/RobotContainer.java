@@ -98,10 +98,10 @@ public class RobotContainer {
         m_driverController.a().onTrue(Commands.runOnce(() -> m_robotPath.followpath(true)));
         m_driverController.b().onTrue(Commands.runOnce(() -> m_robotPath.followpath(false)));
 
-        m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.oneAlgae()));
-        m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.twoAlgae()));
-        m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
-        m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.outputCoral()));
+        m_mechanismController.b().onTrue(Commands.runOnce(() -> m_robotMechanisms.backAlgae()));
+        m_mechanismController.a().onTrue(Commands.runOnce(() -> m_robotMechanisms.frontAlgae()));
+        m_mechanismController.x().onTrue(Commands.runOnce(() -> m_robotMechanisms.slowCoral()));
+        m_mechanismController.y().onTrue(Commands.runOnce(() -> m_robotMechanisms.fastCoral()));
         //m_mechanismController.x().whileTrue(m_robotElevator.staticForwardTest());
         //m_mechanismController.y().whileTrue(m_robotElevator.staticBackwardTest());
         m_mechanismController.povDown().onTrue(Commands.runOnce(() -> m_robotElevator.trough()));
@@ -120,13 +120,15 @@ public class RobotContainer {
      */
     private void configureAutoCommands() {
         //Remember Commands.waitSeconds() is a thing
-        NamedCommands.registerCommand("Trough", Commands.runOnce(() -> m_robotElevator.trough()));
-        NamedCommands.registerCommand("Low", Commands.runOnce(() -> m_robotElevator.low()));
-        NamedCommands.registerCommand("Middle", Commands.runOnce(() -> m_robotElevator.middle()));
-        NamedCommands.registerCommand("High", Commands.runOnce(() -> m_robotElevator.high()));
-        NamedCommands.registerCommand("Run Coral", Commands.runOnce(() -> m_robotMechanisms.intakeCoral()));
+        NamedCommands.registerCommand("Trough", new SequentialCommandGroup(Commands.runOnce(() -> m_robotElevator.trough()), Commands.waitSeconds(3)));
+        NamedCommands.registerCommand("Low", new SequentialCommandGroup(Commands.runOnce(() -> m_robotElevator.low()), Commands.waitSeconds(3)));
+        NamedCommands.registerCommand("Middle", new SequentialCommandGroup(Commands.runOnce(() -> m_robotElevator.middle()), Commands.waitSeconds(3)));
+        NamedCommands.registerCommand("High", new SequentialCommandGroup(Commands.runOnce(() -> m_robotElevator.high()), Commands.waitSeconds(3)));
+        NamedCommands.registerCommand("Run Coral", Commands.runOnce(() -> m_robotMechanisms.slowCoral()));
+        NamedCommands.registerCommand("Run Coral Fast", Commands.runOnce (() -> m_robotMechanisms.fastCoral()));
         NamedCommands.registerCommand("Stop Coral", Commands.runOnce(() -> m_robotMechanisms.stopCoral()));
-
+        NamedCommands.registerCommand("Align Right", Commands.runOnce(() -> m_robotPath.followpath(false)));
+        NamedCommands.registerCommand("Align Left", Commands.runOnce(() -> m_robotPath.followpath(true)));
 
         
 
@@ -140,10 +142,10 @@ public class RobotContainer {
         m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
         m_chooser.setDefaultOption("Test", new PathPlannerAuto("Test Auto"));
 
-        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
-        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
-        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
-        m_chooser.addOption("Test", new PathPlannerAuto("Test Auto"));
+        m_chooser.addOption("Middle blue top left", new PathPlannerAuto("Middle Blue Barge to Left Top Reef"));
+        m_chooser.addOption("One Coral Straight", new PathPlannerAuto("One Coral Straight"));
+        m_chooser.addOption("Close Top", new PathPlannerAuto("Close Top"));
+        m_chooser.addOption("Bottom Close", new PathPlannerAuto("Bottom Close"));
 
     }
 
