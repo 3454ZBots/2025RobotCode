@@ -308,9 +308,9 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         //Quadratic Scaling
-        xSpeed *= Math.abs(xSpeed)*0.9;
-        ySpeed *= Math.abs(ySpeed)*0.9;
-        rot *= Math.abs(rot)*0.9;
+        xSpeed *= 0.6;//Math.abs(xSpeed)*0.9;
+        ySpeed *= 0.6;//Math.abs(ySpeed)*0.9;
+        rot *= 0.6;//Math.abs(rot)*0.9;
 
 
 
@@ -330,7 +330,7 @@ public class DriveSubsystem extends SubsystemBase {
          * relative to the field. This determines what each swerve module needs to do to achieve that
          */
         if(isFieldOriented) {
-            drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading().plus(Rotation2d.fromDegrees(180))));
+            drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading().plus(Rotation2d.fromDegrees(0))));
         }
         else {
             drive(new ChassisSpeeds(xSpeed, ySpeed, rot));

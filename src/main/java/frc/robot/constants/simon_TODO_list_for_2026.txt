@@ -1,0 +1,11 @@
+1. Get 2.4Ghz working
+
+2. Assert dominance over other subteams
+
+3. Unify robot rotation data. Sometimes we switch it based on alliance and
+sometimes we use it differently for vision vs. FOD it's all very confusing
+so fix it
+
+4. Alleviate impending mechanical failings
+
+5. Do the fun part
