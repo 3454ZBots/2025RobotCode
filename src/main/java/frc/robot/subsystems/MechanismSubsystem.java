@@ -22,8 +22,7 @@ public class MechanismSubsystem extends SubsystemBase{
     private SparkMax algaeWrist;
 
     private boolean coralFast = false;
-    private boolean coralSlow = false
-    ;
+    private boolean coralSlow = false;
 
     private boolean algaeFront = false;
     private boolean algaeBack = false;
